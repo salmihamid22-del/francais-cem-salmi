@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Français au CEM — Prof. SALMI Ahmed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <iframe id="hiddenDownloadFrame" class="hidden" title="Téléchargement direct"></iframe>
+
+  <!-- En-tête -->
+  <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-white/15 p-2.5 rounded-xl border border-white/20">
+          <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Le Français au CEM</h1>
+          <p class="text-xs sm:text-sm text-blue-100 font-medium">Espace pédagogique de Prof. SALMI Ahmed • 1AM • 2AM • 3AM • 4AM • BEM</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <span id="dbStatusBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 border border-white/20">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>Connexion...
+        </span>
+        <button onclick="ouvrirModalRepartitions()" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Répartitions (4 niveaux)</button>
+        <button onclick="ouvrirModalPlans()" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Plans des apprentissages</button>
+        <button onclick="filtrerCategorie('Applications', 'TOUS')" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Applications</button>
+        <button id="btnAdminUpload" onclick="ouvrirModalDepot()" class="hidden bg-amber-400 hover:bg-amber-300 text-blue-950 font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer">+ Déposer un document</button>
+        <button id="btnAdminAuth" onclick="gererClicAdmin()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer"><span id="adminAuthLabel">Espace Admin</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bandeau Admin -->
+  <div id="adminBanner" class="hidden bg-amber-50 border-b border-amber-200 text-amber-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between text-xs font-semibold">
+      <span>Mode Administrateur activé (Prof. SALMI Ahmed) — Ajout (fichier local ou lien externe), modification et suppression actifs.</span>
+      <button onclick="deconnecterAdmin()" class="underline text-amber-900 hover:text-red-700 cursor-pointer">Quitter le mode Admin</button>
+    </div>
+  </div>
+
+  <!-- Statistiques et Filtres Niveaux -->
+  <section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Bibliothèque numérique de langue française (Cycle Moyen)</h2>
+          <p class="text-sm text-slate-600 mt-0.5">Devoirs (T1-T3), compositions (T1-T3), fiches pédagogiques (Séquences 01 à 07), répartitions, plans, applications et sujets du BEM.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 text-sm">
+          <div class="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl border border-blue-100 text-center">
+            <span id="statTotalDocs" class="block text-lg font-extrabold">0</span>
+            <span class="text-xs text-blue-700 font-medium">Documents en ligne</span>
+          </div>
+          <div class="bg-emerald-50 text-emerald-900 px-4 py-2 rounded-xl border border-emerald-100 text-center">
+            <span id="statTotalDownloads" class="block text-lg font-extrabold">0</span>
+            <span class="text-xs text-emerald-700 font-medium">Téléchargements</span>
+          </div>
+          <div class="bg-indigo-50 text-indigo-900 px-4 py-2 rounded-xl border border-indigo-100 text-center">
+            <span id="statTotalVisitors" class="block text-lg font-extrabold">1</span>
+            <span class="text-xs text-indigo-700 font-medium">Visiteurs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-center gap-2" id="niveauTabs">
+        <button data-niveau="TOUS" onclick="filtrerNiveau('TOUS')" class="tab-niveau active px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white shadow-sm transition cursor-pointer">Tous les niveaux</button>
+        <button data-niveau="1AM" onclick="filtrerNiveau('1AM')" class="tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">1AM</button>
+        <button data-niveau="2AM" onclick="filtrerNiveau('2AM')" class="tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">2AM</button>
+        <button data-niveau="3AM" onclick="filtrerNiveau('3AM')" class="tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">3AM</button>
+        <button data-niveau="4AM" onclick="filtrerNiveau('4AM')" class="tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">4AM</button>
+        <button data-niveau="BEM" onclick="ouvrirTableauBEM()" class="tab-niveau px-4 py-2 rounded-xl text-sm font-bold bg-amber-100 text-amber-900 hover:bg-amber-200 transition cursor-pointer">Spécial BEM (Sujets & Corrigés)</button>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input type="text" id="searchInput" oninput="afficherDocuments()" placeholder="Rechercher un titre, un thème, une séquence, une année BEM..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none" />
+        <select id="filterTrimestre" onchange="synchroniserFiltreSousCat()" class="px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 focus:ring-2 focus:ring-blue-600 outline-none">
+          <option value="TOUS">Tous les trimestres / séquences</option>
+          <optgroup label="Trimestres">
+            <option value="Trimestre 1">1er Trimestre (Trim 1)</option>
+            <option value="Trimestre 2">2ème Trimestre (Trim 2)</option>
+            <option value="Trimestre 3">3ème Trimestre (Trim 3)</option>
+          </optgroup>
+          <optgroup label="Séquences (Fiches pédagogiques)">
+            <option value="Séquence 01">Séquence 01</option>
+            <option value="Séquence 02">Séquence 02</option>
+            <option value="Séquence 03">Séquence 03</option>
+            <option value="Séquence 04">Séquence 04</option>
+            <option value="Séquence 05">Séquence 05</option>
+            <option value="Séquence 06">Séquence 06</option>
+            <option value="Séquence 07">Séquence 07</option>
+          </optgroup>
+          <option value="Annales">Annales & Révisions</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenu principal : Panneau bleu nuit à gauche + Grille / Tableau BEM à droite -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    <div class="flex flex-col lg:flex-row items-start gap-6">
+      <aside class="w-full lg:w-72 shrink-0 bg-[#0b1736] text-white rounded-2xl shadow-xl border border-blue-900/60 overflow-hidden lg:sticky lg:top-24">
+        <div class="bg-[#071026] px-5 py-4 border-b border-blue-900/60">
+          <h3 class="font-extrabold text-sm tracking-wide uppercase text-white">Catégories & Sous-catégories</h3>
+          <p class="text-[11px] text-blue-300">Cliquez sur la flèche pour déplier</p>
+        </div>
+        <nav class="p-3 space-y-1.5" id="sidebarCategories">
+          <button data-cat="TOUS" data-sub="TOUS" onclick="filtrerCategorie('TOUS', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow transition cursor-pointer">
+            <span>Toutes les catégories</span><span id="count-cat-TOUS" class="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white">0</span>
+          </button>
+
+          <!-- Devoir -->
+          <div>
+            <button data-cat="Devoir" data-sub="TOUS" onclick="filtrerCategorie('Devoir', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+              <span class="flex items-center gap-2">
+                <span>Devoir surveillé</span>
+                <svg id="arrow-Devoir" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+              <span id="count-cat-Devoir" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+            </button>
+            <div id="sub-Devoir" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
+              <button data-cat="Devoir" data-sub="Trimestre 1" onclick="filtrerCategorie('Devoir', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Devoir-Trimestre 1" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Devoir" data-sub="Trimestre 2" onclick="filtrerCategorie('Devoir', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Devoir-Trimestre 2" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Devoir" data-sub="Trimestre 3" onclick="filtrerCategorie('Devoir', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Devoir-Trimestre 3" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            </div>
+          </div>
+
+          <!-- Composition -->
+          <div>
+            <button data-cat="Composition" data-sub="TOUS" onclick="filtrerCategorie('Composition', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+              <span class="flex items-center gap-2">
+                <span>Composition trimestrielle</span>
+                <svg id="arrow-Composition" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+              <span id="count-cat-Composition" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+            </button>
+            <div id="sub-Composition" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
+              <button data-cat="Composition" data-sub="Trimestre 1" onclick="filtrerCategorie('Composition', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Composition-Trimestre 1" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Composition" data-sub="Trimestre 2" onclick="filtrerCategorie('Composition', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Composition-Trimestre 2" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Composition" data-sub="Trimestre 3" onclick="filtrerCategorie('Composition', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Composition-Trimestre 3" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            </div>
+          </div>
+
+          <!-- Fiche pédagogique -->
+          <div>
+            <button data-cat="Fiche pédagogique" data-sub="TOUS" onclick="filtrerCategorie('Fiche pédagogique', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+              <span class="flex items-center gap-2">
+                <span>Fiche pédagogique</span>
+                <svg id="arrow-Fiche pédagogique" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+              <span id="count-cat-Fiche pédagogique" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+            </button>
+            <div id="sub-Fiche pédagogique" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 01" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 01')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 01</span><span id="count-sub-Fiche pédagogique-Séquence 01" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 02" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 02')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 02</span><span id="count-sub-Fiche pédagogique-Séquence 02" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 03" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 03')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 03</span><span id="count-sub-Fiche pédagogique-Séquence 03" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 04" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 04')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 04</span><span id="count-sub-Fiche pédagogique-Séquence 04" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 05" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 05')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 05</span><span id="count-sub-Fiche pédagogique-Séquence 05" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 06" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 06')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 06</span><span id="count-sub-Fiche pédagogique-Séquence 06" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 07" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 07')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 07</span><span id="count-sub-Fiche pédagogique-Séquence 07" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            </div>
+          </div>
+
+          <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+          <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+          <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-sky-200 hover:bg-blue-900/60 cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-sky-300">0</span></button>
+          <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-amber-200 hover:bg-blue-900/60 cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-amber-300">0</span></button>
+        </nav>
+      </aside>
+
+      <div class="flex-1 w-full min-w-0">
+        <div id="activeFilterBreadcrumb" class="hidden mb-4 bg-blue-50 border border-blue-200 text-blue-900 px-4 py-2.5 rounded-xl flex items-center justify-between text-xs font-semibold">
+          <span id="breadcrumbText">Filtre actif</span>
+          <button onclick="filtrerCategorie('TOUS', 'TOUS')" class="underline text-blue-800 hover:text-blue-950 cursor-pointer">Afficher tout</button>
+        </div>
+
+        <div id="loadingState" class="text-center py-16">
+          <div class="inline-block w-10 h-10 border-4 border-blue-800 border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-3 text-sm font-medium text-slate-600">Chargement des documents...</p>
+        </div>
+        <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+          <h3 id="emptyTitle" class="text-base font-bold text-slate-900">Aucun document disponible dans cette rubrique</h3>
+          <p id="emptyDesc" class="mt-1 text-sm text-slate-500">Modifiez vos filtres ou sélectionnez « Toutes les catégories ».</p>
+          <button onclick="chargerDocuments()" class="mt-4 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">Actualiser la liste</button>
+        </div>
+
+        <!-- Tableau Spécial BEM -->
+        <div id="bemTableSection" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 text-blue-950 px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-extrabold text-lg">Annales & Sujets du BEM — Français (4AM)</h3>
+              <p class="text-xs font-semibold text-amber-950/80">Tableau récapitulatif : Année • Sujet d'examen • Corrigé type</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btnAdminAjouterBEM" onclick="ouvrirDepotBEM()" class="hidden bg-blue-950 hover:bg-blue-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow cursor-pointer">+ Ajouter un Sujet / Corrigé BEM</button>
+              <button onclick="filtrerCategorie('TOUS', 'TOUS')" class="bg-white/90 hover:bg-white text-slate-900 text-xs font-bold px-3.5 py-2 rounded-xl cursor-pointer">Retour</button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-white text-xs uppercase tracking-wider">
+                  <th class="py-3.5 px-5 font-extrabold w-1/4">Année / Session</th>
+                  <th class="py-3.5 px-5 font-extrabold w-[37.5%]">Sujet</th>
+                  <th class="py-3.5 px-5 font-extrabold w-[37.5%]">Corrigé</th>
+                </tr>
+              </thead>
+              <tbody id="bemTableBody" class="divide-y divide-slate-200 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="documentsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <p>© 2026 <strong class="text-white">Le Français au CEM</strong> — Prof. SALMI Ahmed. Tous droits réservés.</p>
+      <p>Plateforme dédiée à l'enseignement moyen en Algérie (1AM • 2AM • 3AM • 4AM • BEM)</p>
+    </div>
+  </footer>
+
+  <!-- Modale Aperçu -->
+  <div id="modalApercu" class="hidden fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[60] flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-5xl w-full h-[92vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span id="apercuBadgeNiveau" class="text-[11px] font-extrabold px-2 py-0.5 rounded bg-blue-600 text-white"></span>
+            <span id="apercuBadgeCategorie" class="text-[11px] font-semibold text-emerald-300"></span>
+          </div>
+          <h3 id="apercuTitre" class="font-bold text-sm sm:text-base truncate mt-0.5">Aperçu du document</h3>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="apercuBtnTelecharger" type="button" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl cursor-pointer">Télécharger</button>
+          <button onclick="fermerModalApercu()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl text-sm font-bold cursor-pointer">Fermer &times;</button>
+        </div>
+      </div>
+      <div class="flex-1 bg-slate-200"><iframe id="apercuIframe" src="" class="w-full h-full border-0"></iframe></div>
+    </div>
+  </div>
+
+  <!-- Modale Répartitions Annuelles -->
+  <div id="modalRepartitions" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-blue-900 to-emerald-800 text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-extrabold text-lg">Répartitions Annuelles — Cycle Moyen (4 Niveaux)</h3>
+          <p class="text-xs text-blue-100">Documents hébergés par Prof. SALMI Ahmed</p>
+        </div>
+        <button onclick="fermerModalRepartitions()" class="text-white text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+      <div class="bg-slate-100 px-6 pt-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex gap-2">
+          <button onclick="changerOngletRepartition('1AM')" id="rep-tab-1AM" class="rep-tab px-4 py-2.5 rounded-t-xl text-sm font-extrabold bg-white text-blue-900 border-t border-x border-slate-200 -mb-px cursor-pointer">1AM</button>
+          <button onclick="changerOngletRepartition('2AM')" id="rep-tab-2AM" class="rep-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">2AM</button>
+          <button onclick="changerOngletRepartition('3AM')" id="rep-tab-3AM" class="rep-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">3AM</button>
+          <button onclick="changerOngletRepartition('4AM')" id="rep-tab-4AM" class="rep-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">4AM (BEM)</button>
+        </div>
+        <button id="btnAdminAjouterRepartition" onclick="ouvrirDepotCategorie('Répartition annuelle', niveauRepartitionActif)" class="hidden mb-2 text-xs font-bold bg-amber-400 hover:bg-amber-300 text-blue-950 px-3 py-1.5 rounded-lg cursor-pointer">+ Déposer (<span id="repAdminNiveauLabel">1AM</span>)</button>
+      </div>
+      <div id="repartitionContenu" class="p-6 overflow-y-auto flex-1 bg-slate-50"></div>
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end"><button onclick="fermerModalRepartitions()" class="bg-blue-900 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button></div>
+    </div>
+  </div>
+
+  <!-- Modale Plans des Apprentissages -->
+  <div id="modalPlans" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-sky-900 via-blue-900 to-indigo-900 text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-extrabold text-lg">Plans des Apprentissages — Cycle Moyen (4 Niveaux)</h3>
+          <p class="text-xs text-sky-200">Documents hébergés par Prof. SALMI Ahmed</p>
+        </div>
+        <button onclick="fermerModalPlans()" class="text-white text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+      <div class="bg-slate-100 px-6 pt-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex gap-2">
+          <button onclick="changerOngletPlan('1AM')" id="plan-tab-1AM" class="plan-tab px-4 py-2.5 rounded-t-xl text-sm font-extrabold bg-white text-sky-900 border-t border-x border-slate-200 -mb-px cursor-pointer">1AM</button>
+          <button onclick="changerOngletPlan('2AM')" id="plan-tab-2AM" class="plan-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">2AM</button>
+          <button onclick="changerOngletPlan('3AM')" id="plan-tab-3AM" class="plan-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">3AM</button>
+          <button onclick="changerOngletPlan('4AM')" id="plan-tab-4AM" class="plan-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer">4AM (BEM)</button>
+        </div>
+        <button id="btnAdminAjouterPlan" onclick="ouvrirDepotCategorie('Plan d\'apprentissage', niveauPlanActif)" class="hidden mb-2 text-xs font-bold bg-amber-400 hover:bg-amber-300 text-blue-950 px-3 py-1.5 rounded-lg cursor-pointer">+ Déposer (<span id="planAdminNiveauLabel">1AM</span>)</button>
+      </div>
+      <div id="planContenu" class="p-6 overflow-y-auto flex-1 bg-slate-50"></div>
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end"><button onclick="fermerModalPlans()" class="bg-sky-900 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button></div>
+    </div>
+  </div>
+
+  <!-- Modale Connexion Admin -->
+  <div id="modalLogin" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden">
+      <div class="bg-blue-950 text-white px-6 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-base">Accès Administrateur</h3>
+        <button onclick="fermerModalLogin()" class="text-blue-200 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+      <form onsubmit="verifierMotDePasse(event)" class="p-6 space-y-4">
+        <p class="text-xs text-slate-600">Saisissez vos identifiants administrateur pour gérer les documents.</p>
+        <input
+          type="email"
+          id="inputAdminEmail"
+          required
+          placeholder="Adresse e-mail administrateur"
+          class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none"
+        />
+        <input
+          type="password"
+          id="inputAdminPassword"
+          required
+          placeholder="Mot de passe"
+          class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none"
+        />
+        <div id="loginErrorMsg" class="hidden text-xs font-semibold text-red-600 bg-red-50 p-2.5 rounded-xl">Identifiants incorrects ou accès refusé.</div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="fermerModalLogin()" class="px-4 py-2 text-xs font-semibold text-slate-600 rounded-xl cursor-pointer">Annuler</button>
+          <button type="submit" class="bg-blue-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl cursor-pointer">Déverrouiller</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modale Ajout / Modification -->
+  <div id="modalDepot" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+      <div class="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
+        <h3 id="modalDepotTitle" class="font-bold text-lg">Déposer un nouveau document</h3>
+        <button onclick="fermerModalDepot()" class="text-blue-200 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <form id="formDepot" onsubmit="soumettreDocument(event)" class="p-6 space-y-4 overflow-y-auto">
+        <input type="hidden" id="editDocId" value="" />
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Titre *</label>
+          <input type="text" id="docTitre" required placeholder="Ex : Fiche de compréhension — Séquence 01" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Catégorie *</label>
+            <select id="docCategorie" onchange="adapterOptionsSousCategorieFormulaire()" required class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white outline-none">
+              <option value="Devoir">Devoir</option>
+              <option value="Composition">Composition</option>
+              <option value="Fiche pédagogique">Fiche pédagogique</option>
+              <option value="Répartition annuelle">Répartition annuelle</option>
+              <option value="Plan d'apprentissage">Plan d'apprentissage</option>
+              <option value="Applications">Applications</option>
+              <option value="Sujet BEM">Sujet BEM</option>
+            </select>
+          </div>
+          <div>
+            <label id="labelDocTrimestre" class="block text-xs font-bold uppercase text-slate-700 mb-1">Sous-catégorie *</label>
+            <select id="docTrimestre" required class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white outline-none">
+              <option value="Trimestre 1">Trimestre 1</option>
+              <option value="Trimestre 2">Trimestre 2</option>
+              <option value="Trimestre 3">Trimestre 3</option>
+              <option value="Annales">Annales / Annuel</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="champTypeBemWrapper" class="hidden bg-amber-50 p-3 rounded-xl border border-amber-200">
+          <label class="block text-xs font-bold uppercase text-amber-950 mb-1">Nature du fichier BEM *</label>
+          <select id="docTypeBem" class="w-full px-3 py-2 border border-amber-300 rounded-lg text-sm font-bold bg-white outline-none">
+            <option value="Sujet">Sujet d'examen (Colonne Sujet)</option>
+            <option value="Corrigé">Corrigé type (Colonne Corrigé)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Niveau *</label>
+            <select id="docNiveau" required class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white outline-none">
+              <option value="Tous les niveaux">Tous les niveaux (1AM-4AM)</option>
+              <option value="1AM">1AM</option>
+              <option value="2AM">2AM</option>
+              <option value="3AM">3AM</option>
+              <option value="4AM">4AM</option>
+              <option value="BEM">BEM</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Auteur</label>
+            <input type="text" id="docAuteur" value="Prof. SALMI Ahmed" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Source *</label>
+          <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button type="button" id="btnSourceLocal" onclick="changerSourceDocument('local')" class="py-2 px-3 rounded-lg text-xs font-bold bg-blue-900 text-white shadow-sm cursor-pointer">Fichier depuis mon PC</button>
+            <button type="button" id="btnSourceExterne" onclick="changerSourceDocument('externe')" class="py-2 px-3 rounded-lg text-xs font-semibold text-slate-700 cursor-pointer">Lien externe (Drive / App...)</button>
+          </div>
+        </div>
+
+        <div id="champFichierWrapper">
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Fichier (PDF, DOCX, DOC, ZIP) <span id="fichierObligatoireStar">*</span></label>
+          <input type="file" id="docFichier" accept=".pdf,.doc,.docx,.zip,.exe" class="w-full text-sm text-slate-600 border border-slate-300 rounded-xl p-1.5" />
+          <p id="fichierEditHint" class="hidden text-[11px] text-slate-500 mt-1">Laissez vide pour conserver le fichier actuel.</p>
+        </div>
+
+        <div id="champLienExterneWrapper" class="hidden space-y-2.5 bg-sky-50 p-3.5 rounded-xl border border-sky-200">
+          <input type="url" id="docLienExterne" placeholder="https://drive.google.com/... ou https://mon-app.vercel.app" class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none" />
+          <div class="flex items-center justify-between gap-2">
+            <label class="text-xs font-semibold text-slate-700">Format :</label>
+            <select id="docFormatExterne" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold">
+              <option value="document.pdf">Document PDF</option>
+              <option value="document.docx">Document Word (DOCX)</option>
+              <option value="application.app">Application Web / Logiciel</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="uploadErrorMsg" class="hidden text-xs font-semibold text-red-600 bg-red-50 p-3 rounded-xl"></div>
+
+        <div class="pt-2 flex justify-end gap-3">
+          <button type="button" onclick="fermerModalDepot()" class="px-4 py-2.5 text-sm font-semibold text-slate-600 rounded-xl cursor-pointer">Annuler</button>
+          <button type="submit" id="btnSubmitDoc" class="bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow cursor-pointer">Publier en ligne</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="hidden fixed bottom-5 right-5 bg-slate-900 text-white text-sm font-medium px-5 py-3 rounded-xl shadow-xl z-[80]"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://wfzudentquhqldsodxbg.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_V4Ag3TWjW_j6T7jPKoNeGw_pRfn0TbB';
+    const ADMIN_USER_ID = '9c41e1b2-98bf-4a80-916d-b3910ed07a6f';
+    const SEQUENCES_LISTE = ['Séquence 01', 'Séquence 02', 'Séquence 03', 'Séquence 04', 'Séquence 05', 'Séquence 06', 'Séquence 07'];
+    const TRIMESTRES_LISTE = ['Trimestre 1', 'Trimestre 2', 'Trimestre 3'];
+    const ANNEES_BEM_LISTE = ['BEM 2026', 'BEM 2025', 'BEM 2024', 'BEM 2023', 'BEM 2022', 'BEM 2021', 'BEM 2020', 'BEM 2019', 'BEM 2018', 'BEM 2017', 'BEM 2016', 'BEM 2015', 'BEM Blanc 2026', 'BEM Blanc'];
+
+    let supabaseClient = null;
+
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true
+            }
+          }
+        );
+      }
+    } catch (e) {
+      console.error('Erreur Supabase :', e);
+    }
+
+    let tousLesDocuments = [];
+    let niveauActif = 'TOUS';
+    let categorieActive = 'TOUS';
+    let sousCategorieActive = 'TOUS';
+    let niveauRepartitionActif = '1AM';
+    let niveauPlanActif = '1AM';
+    let sourceDocumentActive = 'local';
+    let estAdmin = false;
+    let authInitialisee = false;
+
+    function correspondAuNiveau(doc, niveauCible) {
+      if (niveauCible === 'TOUS') return true;
+      if (doc.niveau === niveauCible) return true;
+      if (doc.niveau === 'Tous les niveaux' && ['1AM', '2AM', '3AM', '4AM'].includes(niveauCible)) return true;
+      return false;
+    }
+
+    function extraireIdDrive(url) {
+      if (!url) return null;
+      const m = url.match(/\/file\/d\/([^/?#]+)/) || url.match(/\/d\/([^/?#]+)/) || url.match(/[?&]id=([^&#]+)/);
+      return m ? m[1] : null;
+    }
+
+    function estLienApplicationWeb(doc) {
+      return (doc.nom_fichier || '').toLowerCase().endsWith('.app') || (doc.categorie === 'Applications' && !extraireIdDrive(doc.fichier_url) && !(doc.fichier_url || '').includes('supabase.co'));
+    }
+
+    function preparerUrlApercu(url, estPdf, estApp) {
+      if (!url) return '';
+      const driveId = extraireIdDrive(url);
+      if (driveId) return `https://drive.google.com/file/d/${driveId}/preview`;
+      if (estApp || estPdf) return url;
+      return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+    }
+
+    function preparerUrlTelechargement(url, nomFichier) {
+      if (!url) return '';
+      const driveId = extraireIdDrive(url);
+      if (driveId) return `https://drive.usercontent.google.com/u/0/uc?id=${driveId}&export=download`;
+      if (url.includes('supabase.co')) {
+        const sep = url.includes('?') ? '&' : '?';
+        return `${url}${sep}download=${encodeURIComponent(nomFichier || 'document')}`;
+      }
+      return url;
+    }
+
+    function telechargerDirectement(event, id) {
+      if (event) { event.preventDefault(); event.stopPropagation(); }
+      const doc = tousLesDocuments.find(d => String(d.id) === String(id));
+      if (!doc) return;
+      incrementerTelechargement(doc.id, doc.telechargements || 0);
+      if (estLienApplicationWeb(doc)) { window.open(doc.fichier_url, '_blank', 'noopener,noreferrer'); return; }
+      const urlDirecte = preparerUrlTelechargement(doc.fichier_url, doc.nom_fichier);
+      if (doc.fichier_url.includes('docs.google.com/document/d/')) {
+        const docId = extraireIdDrive(doc.fichier_url);
+        if (docId) { document.getElementById('hiddenDownloadFrame').src = `https://docs.google.com/document/d/${docId}/export?format=pdf`; afficherToast('Téléchargement direct démarré...'); return; }
+      }
+      document.getElementById('hiddenDownloadFrame').src = urlDirecte;
+      afficherToast('Téléchargement direct démarré...');
+    }
+
+    function detecterNatureBEM(doc) {
+      const txt = `${doc.titre || ''} ${doc.trimestre || ''}`.toLowerCase();
+      return (txt.includes('corrig') || txt.includes('correction') || txt.includes('barème') || txt.includes('bareme')) ? 'Corrigé' : 'Sujet';
+    }
+
+    function extraireAnneeBEM(doc) {
+      if (doc.trimestre && doc.trimestre.toLowerCase().includes('bem')) return doc.trimestre.replace(/\s*\((sujet|corrigé)\)/i, '').trim();
+      const matchAnnee = (doc.titre || '').match(/(20\d{2})/);
+      if (matchAnnee) return (doc.titre || '').toLowerCase().includes('blanc') ? `BEM Blanc ${matchAnnee[1]}` : `BEM ${matchAnnee[1]}`;
+      return doc.trimestre && doc.trimestre !== 'Annales' ? doc.trimestre : (doc.titre || 'Session BEM');
+    }
+
+    function ouvrirTableauBEM() {
+      categorieActive = 'Sujet BEM';
+      sousCategorieActive = 'TOUS';
+      document.getElementById('filterTrimestre').value = 'TOUS';
+      mettreAJourStylesMenuGauche();
+      afficherDocuments();
+    }
+
+    function genererCelluleActionBEM(doc, labelDefaut) {
+      if (!doc) return `<span class="text-xs italic text-slate-400">Non disponible</span>`;
+      const estPdf = (doc.nom_fichier || '').toLowerCase().endsWith('.pdf');
+      const adminBtns = estAdmin ? `<div class="mt-1.5 flex items-center gap-1.5"><button type="button" onclick="ouvrirModalEdition('${doc.id}')" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900 cursor-pointer">Modifier</button><button type="button" onclick="supprimerDocument('${doc.id}')" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-red-100 text-red-800 cursor-pointer">Suppr.</button></div>` : '';
+      return `<div><p class="text-xs font-bold text-slate-800 mb-1.5">${doc.titre}</p><div class="flex flex-wrap items-center gap-2"><button type="button" onclick="ouvrirApercuDocument('${doc.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg cursor-pointer">Aperçu</button><button type="button" onclick="telechargerDirectement(event, '${doc.id}')" class="${labelDefaut === 'Corrigé' ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-blue-900 hover:bg-blue-800'} text-white text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer">Télécharger (${estPdf ? 'PDF' : 'DOCX'})</button><span class="text-[11px] text-slate-500"><strong class="dl-count-${doc.id}">${doc.telechargements || 0}</strong> dl</span></div>${adminBtns}</div>`;
+    }
+
+    function afficherTableauBEM(docsBem) {
+      const tbody = document.getElementById('bemTableBody');
+      if (docsBem.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="py-10 px-6 text-center text-slate-500"><p class="font-bold text-slate-800 text-base">Aucun sujet ou corrigé BEM publié pour le moment</p></td></tr>`;
+        return;
+      }
+      const groupes = {};
+      docsBem.forEach(doc => {
+        const annee = extraireAnneeBEM(doc);
+        if (!groupes[annee]) groupes[annee] = { annee, sujets: [], corriges: [] };
+        if (detecterNatureBEM(doc) === 'Corrigé') groupes[annee].corriges.push(doc);
+        else groupes[annee].sujets.push(doc);
+      });
+      const lignes = Object.values(groupes).sort((a, b) => b.annee.localeCompare(a.annee));
+      tbody.innerHTML = lignes.map(g => {
+        const nbLignes = Math.max(g.sujets.length, g.corriges.length, 1);
+        let html = '';
+        for (let i = 0; i < nbLignes; i++) {
+          html += `<tr class="hover:bg-amber-50/40 transition align-top">${i === 0 ? `<td rowspan="${nbLignes}" class="py-4 px-5 font-extrabold text-blue-950 bg-slate-50/70 border-r border-slate-200"><span class="inline-block px-3 py-1 rounded-lg bg-amber-100 text-amber-950 border border-amber-300 text-xs font-extrabold">${g.annee}</span></td>` : ''}<td class="py-4 px-5 border-r border-slate-100">${genererCelluleActionBEM(g.sujets[i] || null, 'Sujet')}</td><td class="py-4 px-5">${genererCelluleActionBEM(g.corriges[i] || null, 'Corrigé')}</td></tr>`;
+        }
+        return html;
+      }).join('');
+    }
+
+    function genererCarteDocumentHTML(doc) {
+      const nomLower = (doc.nom_fichier || '').toLowerCase();
+      const estPdf = nomLower.endsWith('.pdf');
+      const estApp = estLienApplicationWeb(doc);
+      const estExterne = doc.fichier_url && !doc.fichier_url.includes('supabase.co');
+      const badgeNiveauColor = doc.niveau === 'BEM' ? 'bg-amber-100 text-amber-900 border-amber-200' : (doc.niveau === 'Tous les niveaux' ? 'bg-emerald-100 text-emerald-900 border-emerald-200' : 'bg-blue-100 text-blue-900 border-blue-200');
+      const badgeTypeLabel = estApp ? 'APP' : (estPdf ? 'PDF' : 'DOCX');
+      const badgeTypeClass = estApp ? 'bg-indigo-50 text-indigo-700' : (estPdf ? 'bg-red-50 text-red-700' : 'bg-sky-50 text-sky-700');
+      const dateFormatee = new Date(doc.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+      const boutonsAdmin = estAdmin ? `<div class="mt-3 pt-3 border-t border-dashed border-slate-200 flex items-center justify-end gap-2"><button type="button" onclick="event.stopPropagation(); ouvrirModalEdition('${doc.id}')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 cursor-pointer">Modifier</button><button type="button" onclick="event.stopPropagation(); supprimerDocument('${doc.id}')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-200 cursor-pointer">Supprimer</button></div>` : '';
+
+      return `
+        <article class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div onclick="ouvrirApercuDocument('${doc.id}')" class="cursor-pointer group">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg border ${badgeNiveauColor}">${doc.niveau}</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">${doc.trimestre}</span>
+              <span class="text-xs font-bold px-2 py-0.5 rounded ${badgeTypeClass}">${badgeTypeLabel}</span>
+            </div>
+            <span class="inline-block text-[11px] font-bold uppercase tracking-wider ${doc.categorie === 'Applications' ? 'text-indigo-700' : 'text-emerald-700'} mb-1">${doc.categorie}</span>
+            <h3 class="font-bold text-slate-900 group-hover:text-blue-800 transition text-base leading-snug mb-1.5">${doc.titre}</h3>
+            <p class="text-xs text-slate-500">Source : <span class="font-medium text-slate-700">${estExterne ? (estApp ? 'Application en ligne' : 'Lien externe (Drive)') : (doc.nom_fichier || 'Document')}</span></p>
+            <p class="text-xs text-slate-400 mt-0.5">Par <strong class="text-slate-600">${doc.auteur || 'Prof. SALMI Ahmed'}</strong> • ${dateFormatee}</p>
+          </div>
+          <div class="mt-4 pt-3.5 border-t border-slate-100">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-3">
+              <span>Format : <strong class="text-slate-700">${estApp ? 'Application interactive' : (estPdf ? 'Document PDF' : 'Document Word')}</strong></span>
+              <span><strong class="dl-count-${doc.id} text-slate-800">${doc.telechargements || 0}</strong> ${estApp ? 'accès' : 'téléchargement(s)'}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" onclick="event.stopPropagation(); ouvrirApercuDocument('${doc.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold py-2.5 px-3 rounded-xl cursor-pointer">Aperçu</button>
+              <button type="button" onclick="telechargerDirectement(event, '${doc.id}')" class="w-full ${estApp ? 'bg-indigo-700 hover:bg-indigo-600' : 'bg-blue-900 hover:bg-blue-800'} text-white text-xs font-bold py-2.5 px-3 rounded-xl text-center cursor-pointer">${estApp ? 'Ouvrir' : 'Télécharger'}</button>
+            </div>
+            ${boutonsAdmin}
+          </div>
+        </article>`;
+    }
+
+    function ouvrirApercuDocument(id) {
+      const doc = tousLesDocuments.find(d => String(d.id) === String(id));
+      if (!doc) return;
+      const estApp = estLienApplicationWeb(doc);
+      document.getElementById('apercuTitre').textContent = doc.titre;
+      document.getElementById('apercuBadgeNiveau').textContent = doc.niveau;
+      document.getElementById('apercuBadgeCategorie').textContent = `${doc.categorie} • ${doc.trimestre}`;
+      const btnDl = document.getElementById('apercuBtnTelecharger');
+      btnDl.textContent = estApp ? 'Ouvrir en plein écran' : 'Télécharger';
+      btnDl.onclick = (e) => telechargerDirectement(e, doc.id);
+      const estPdf = (doc.nom_fichier || '').toLowerCase().endsWith('.pdf');
+      document.getElementById('apercuIframe').src = preparerUrlApercu(doc.fichier_url, estPdf, estApp);
+      document.getElementById('modalApercu').classList.remove('hidden');
+    }
+
+    function fermerModalApercu() { document.getElementById('apercuIframe').src = ''; document.getElementById('modalApercu').classList.add('hidden'); }
+    function ouvrirModalRepartitions() { changerOngletRepartition(niveauRepartitionActif); document.getElementById('modalRepartitions').classList.remove('hidden'); }
+    function fermerModalRepartitions() { document.getElementById('modalRepartitions').classList.add('hidden'); }
+
+    function changerOngletRepartition(niveau) {
+      niveauRepartitionActif = niveau;
+      document.getElementById('repAdminNiveauLabel').textContent = niveau;
+      ['1AM', '2AM', '3AM', '4AM'].forEach(niv => {
+        document.getElementById(`rep-tab-${niv}`).className = niv === niveau ? 'rep-tab px-4 py-2.5 rounded-t-xl text-sm font-extrabold bg-white text-blue-900 border-t border-x border-slate-200 -mb-px cursor-pointer' : 'rep-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer';
+      });
+      const docsFiltres = tousLesDocuments.filter(d => correspondAuNiveau(d, niveau) && d.categorie === 'Répartition annuelle');
+      document.getElementById('repartitionContenu').innerHTML = docsFiltres.length === 0 ? `<div class="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 p-6"><p class="font-bold text-slate-800">Aucune répartition annuelle hébergée pour ${niveau}</p></div>` : `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map(doc => genererCarteDocumentHTML(doc)).join('')}</div>`;
+    }
+
+    function ouvrirModalPlans() { changerOngletPlan(niveauPlanActif); document.getElementById('modalPlans').classList.remove('hidden'); }
+    function fermerModalPlans() { document.getElementById('modalPlans').classList.add('hidden'); }
+
+    function changerOngletPlan(niveau) {
+      niveauPlanActif = niveau;
+      document.getElementById('planAdminNiveauLabel').textContent = niveau;
+      ['1AM', '2AM', '3AM', '4AM'].forEach(niv => {
+        document.getElementById(`plan-tab-${niv}`).className = niv === niveau ? 'plan-tab px-4 py-2.5 rounded-t-xl text-sm font-extrabold bg-white text-sky-900 border-t border-x border-slate-200 -mb-px cursor-pointer' : 'plan-tab px-4 py-2.5 rounded-t-xl text-sm font-semibold text-slate-600 cursor-pointer';
+      });
+      const docsFiltres = tousLesDocuments.filter(d => correspondAuNiveau(d, niveau) && d.categorie === "Plan d'apprentissage");
+      document.getElementById('planContenu').innerHTML = docsFiltres.length === 0 ? `<div class="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 p-6"><p class="font-bold text-slate-800">Aucun plan d'apprentissage hébergé pour ${niveau}</p></div>` : `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map(doc => genererCarteDocumentHTML(doc)).join('')}</div>`;
+    }
+
+    function afficherToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3500);
+    }
+
+    function mettreAJourInterfaceAdmin() {
+      ['btnAdminUpload', 'adminBanner', 'btnAdminAjouterRepartition', 'btnAdminAjouterPlan', 'btnAdminAjouterBEM'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', !estAdmin);
+      });
+      document.getElementById('adminAuthLabel').textContent = estAdmin ? 'Admin connecté' : 'Espace Admin';
+      afficherDocuments();
+      if (!document.getElementById('modalRepartitions').classList.contains('hidden')) changerOngletRepartition(niveauRepartitionActif);
+      if (!document.getElementById('modalPlans').classList.contains('hidden')) changerOngletPlan(niveauPlanActif);
+    }
+
+    function gererClicAdmin() {
+      if (estAdmin) {
+        return deconnecterAdmin();
+      }
+
+      document.getElementById('loginErrorMsg').classList.add('hidden');
+      document.getElementById('inputAdminEmail').value = '';
+      document.getElementById('inputAdminPassword').value = '';
+      document.getElementById('modalLogin').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('inputAdminEmail').focus();
+      }, 100);
+    }
+
+    function fermerModalLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
+
+    async function initialiserAuthentification() {
+      if (!supabaseClient) return;
+
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        console.error('Erreur de session :', error);
+      }
+
+      const session = data?.session || null;
+
+      estAdmin = session?.user?.id === ADMIN_USER_ID;
+      authInitialisee = true;
+      mettreAJourInterfaceAdmin();
+
+      if (session?.user && !estAdmin) {
+        await supabaseClient.auth.signOut();
+      }
+
+      supabaseClient.auth.onAuthStateChange((event, sessionSuivante) => {
+        const autorise = sessionSuivante?.user?.id === ADMIN_USER_ID;
+
+        estAdmin = autorise;
+
+        if (authInitialisee) {
+          mettreAJourInterfaceAdmin();
+        }
+
+        if (sessionSuivante?.user && !autorise) {
+          setTimeout(() => supabaseClient.auth.signOut(), 0);
+        }
+      });
+    }
+
+    async function verifierMotDePasse(event) {
+      event.preventDefault();
+
+      if (!supabaseClient) {
+        afficherToast('Connexion Supabase indisponible.');
+        return;
+      }
+
+      const email = document.getElementById('inputAdminEmail').value.trim();
+      const password = document.getElementById('inputAdminPassword').value;
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        document.getElementById('loginErrorMsg').classList.remove('hidden');
+        return;
+      }
+
+      if (data.user?.id !== ADMIN_USER_ID) {
+        await supabaseClient.auth.signOut();
+        document.getElementById('loginErrorMsg').classList.remove('hidden');
+        return;
+      }
+
+      fermerModalLogin();
+      afficherToast('Mode Admin activé.');
+      await initialiserAuthentification();
+    }
+
+    async function deconnecterAdmin() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+
+      estAdmin = false;
+      mettreAJourInterfaceAdmin();
+      afficherToast('Mode Admin désactivé.');
+    }
+
+    function changerSourceDocument(mode) {
+      sourceDocumentActive = mode;
+      const isLocal = mode === 'local';
+      const isEdit = Boolean(document.getElementById('editDocId').value);
+      document.getElementById('btnSourceLocal').className = isLocal ? 'py-2 px-3 rounded-lg text-xs font-bold bg-blue-900 text-white shadow-sm cursor-pointer' : 'py-2 px-3 rounded-lg text-xs font-semibold text-slate-700 cursor-pointer';
+      document.getElementById('btnSourceExterne').className = !isLocal ? 'py-2 px-3 rounded-lg text-xs font-bold bg-blue-900 text-white shadow-sm cursor-pointer' : 'py-2 px-3 rounded-lg text-xs font-semibold text-slate-700 cursor-pointer';
+      document.getElementById('champFichierWrapper').classList.toggle('hidden', !isLocal);
+      document.getElementById('champLienExterneWrapper').classList.toggle('hidden', isLocal);
+      document.getElementById('docFichier').required = isLocal && !isEdit;
+      document.getElementById('docLienExterne').required = !isLocal;
+    }
+
+    function adapterOptionsSousCategorieFormulaire(valeurForcee, natureBemForcee) {
+      const cat = document.getElementById('docCategorie').value;
+      const selectSub = document.getElementById('docTrimestre');
+      const labelSub = document.getElementById('labelDocTrimestre');
+      document.getElementById('champTypeBemWrapper').classList.toggle('hidden', cat !== 'Sujet BEM');
+
+      if (cat === 'Sujet BEM') {
+        labelSub.textContent = 'Année / Session BEM *';
+        selectSub.innerHTML = ANNEES_BEM_LISTE.map(a => `<option value="${a}">${a}</option>`).join('');
+        document.getElementById('docNiveau').value = 'BEM';
+        if (natureBemForcee) document.getElementById('docTypeBem').value = natureBemForcee;
+      } else if (cat === 'Fiche pédagogique') {
+        labelSub.textContent = 'Sous-catégorie (Séquence 01 à 07) *';
+        selectSub.innerHTML = SEQUENCES_LISTE.map(s => `<option value="${s}">${s}</option>`).join('') + `<option value="Annales">Hors séquence / Général</option>`;
+      } else if (cat === 'Devoir' || cat === 'Composition') {
+        labelSub.textContent = 'Sous-catégorie (Trimestre) *';
+        selectSub.innerHTML = TRIMESTRES_LISTE.map(t => `<option value="${t}">${t}</option>`).join('') + `<option value="Annales">Annales / Rattrapage</option>`;
+      } else {
+        labelSub.textContent = 'Période / Trimestre *';
+        selectSub.innerHTML = `<option value="Annales">Annuel / Annales</option><option value="Trimestre 1">Trimestre 1</option><option value="Trimestre 2">Trimestre 2</option><option value="Trimestre 3">Trimestre 3</option>`;
+      }
+
+      if (valeurForcee) {
+        const cleanVal = valeurForcee.replace(/\s*\((sujet|corrigé)\)/i, '').trim();
+        if (!Array.from(selectSub.options).some(o => o.value === cleanVal)) {
+          const opt = document.createElement('option');
+          opt.value = cleanVal; opt.textContent = cleanVal;
+          selectSub.appendChild(opt);
+        }
+        selectSub.value = cleanVal;
+      }
+    }
+
+    function ouvrirModalDepot() {
+      if (!estAdmin) return gererClicAdmin();
+      document.getElementById('editDocId').value = '';
+      document.getElementById('modalDepotTitle').textContent = 'Déposer un nouveau document';
+      document.getElementById('btnSubmitDoc').textContent = 'Publier en ligne';
+      document.getElementById('fichierObligatoireStar').classList.remove('hidden');
+      document.getElementById('fichierEditHint').classList.add('hidden');
+      document.getElementById('uploadErrorMsg').classList.add('hidden');
+      document.getElementById('formDepot').reset();
+      document.getElementById('docAuteur').value = 'Prof. SALMI Ahmed';
+      if (categorieActive !== 'TOUS') document.getElementById('docCategorie').value = categorieActive;
+      adapterOptionsSousCategorieFormulaire(sousCategorieActive !== 'TOUS' ? sousCategorieActive : null);
+      changerSourceDocument('local');
+      document.getElementById('modalDepot').classList.remove('hidden');
+    }
+
+    function ouvrirDepotBEM() { ouvrirModalDepot(); document.getElementById('docCategorie').value = 'Sujet BEM'; adapterOptionsSousCategorieFormulaire('BEM 2026', 'Sujet'); }
+    function ouvrirDepotCategorie(categorie, niveau) { ouvrirModalDepot(); document.getElementById('docCategorie').value = categorie; adapterOptionsSousCategorieFormulaire('Annales'); document.getElementById('docNiveau').value = niveau; }
+
+    function ouvrirModalEdition(id) {
+      if (!estAdmin) return gererClicAdmin();
+      const doc = tousLesDocuments.find(d => String(d.id) === String(id));
+      if (!doc) return;
+      document.getElementById('editDocId').value = doc.id;
+      document.getElementById('modalDepotTitle').textContent = 'Modifier le document';
+      document.getElementById('btnSubmitDoc').textContent = 'Enregistrer les modifications';
+      document.getElementById('docTitre').value = doc.titre;
+      document.getElementById('docNiveau').value = doc.niveau;
+      document.getElementById('docCategorie').value = doc.categorie;
+      adapterOptionsSousCategorieFormulaire(doc.trimestre, doc.categorie === 'Sujet BEM' ? detecterNatureBEM(doc) : null);
+      document.getElementById('docAuteur').value = doc.auteur || 'Prof. SALMI Ahmed';
+
+      if (doc.fichier_url && !doc.fichier_url.includes('supabase.co')) {
+        changerSourceDocument('externe');
+        document.getElementById('docLienExterne').value = doc.fichier_url;
+        const nomLow = (doc.nom_fichier || '').toLowerCase();
+        document.getElementById('docFormatExterne').value = nomLow.endsWith('.app') ? 'application.app' : (nomLow.endsWith('.docx') ? 'document.docx' : 'document.pdf');
+      } else {
+        changerSourceDocument('local');
+        document.getElementById('docFichier').value = '';
+        document.getElementById('fichierObligatoireStar').classList.add('hidden');
+        document.getElementById('fichierEditHint').classList.remove('hidden');
+      }
+      document.getElementById('uploadErrorMsg').classList.add('hidden');
+      document.getElementById('modalDepot').classList.remove('hidden');
+    }
+
+    function fermerModalDepot() { document.getElementById('modalDepot').classList.add('hidden'); document.getElementById('formDepot').reset(); }
+
+    async function synchroniserCompteurVisiteurs() {
+      if (!supabaseClient) return;
+
+      let dejaCompte = false;
+
+      try {
+        dejaCompte = sessionStorage.getItem('cem_visitor_counted') === 'true';
+      } catch (e) {}
+
+      if (!dejaCompte) {
+        const { data, error } = await supabaseClient.rpc('incrementer_visiteurs');
+
+        if (error) {
+          console.error('Compteur visiteurs :', error);
+        } else {
+          try {
+            sessionStorage.setItem('cem_visitor_counted', 'true');
+          } catch (e) {}
+
+          document.getElementById('statTotalVisitors').textContent = data ?? 0;
+          return;
+        }
+      }
+
+      const { data, error } = await supabaseClient.rpc('get_visitors_count');
+
+      if (!error) {
+        document.getElementById('statTotalVisitors').textContent = data ?? 0;
+      }
+    }
+
+    async function chargerDocuments() {
+      const badge = document.getElementById('dbStatusBadge');
+      document.getElementById('loadingState').classList.remove('hidden');
+      document.getElementById('emptyState').classList.add('hidden');
+      try {
+        if (!supabaseClient) throw new Error('Client Supabase non chargé.');
+        const requete = supabaseClient.from('documents').select('*').order('created_at', { ascending: false });
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Délai de connexion dépassé.')), 8000));
+        const { data, error } = await Promise.race([requete, timeout]);
+        if (error) throw error;
+        const rows = data || [];
+        await synchroniserCompteurVisiteurs();
+        tousLesDocuments = rows;
+        badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span> En ligne';
+        document.getElementById('statTotalDocs').textContent = tousLesDocuments.length;
+        document.getElementById('statTotalDownloads').textContent = tousLesDocuments.reduce((acc, d) => acc + (d.telechargements || 0), 0);
+        mettreAJourCompteursCategories();
+        afficherDocuments();
+      } catch (err) {
+        badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span> Hors ligne';
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('emptyTitle').textContent = 'Impossible de charger les documents';
+        document.getElementById('emptyDesc').textContent = err.message || 'Vérifiez votre connexion internet.';
+        document.getElementById('emptyState').classList.remove('hidden');
+      }
+    }
+
+    function mettreAJourCompteursCategories() {
+      const docsParNiveau = tousLesDocuments.filter(doc => correspondAuNiveau(doc, niveauActif));
+      document.getElementById('count-cat-TOUS').textContent = docsParNiveau.length;
+      ['Devoir', 'Composition', 'Fiche pédagogique', 'Répartition annuelle', "Plan d'apprentissage", 'Applications'].forEach(cat => {
+        const el = document.getElementById(`count-cat-${cat}`);
+        if (el) el.textContent = docsParNiveau.filter(d => d.categorie === cat).length;
+      });
+      const elBem = document.getElementById('count-cat-Sujet BEM');
+      if (elBem) elBem.textContent = tousLesDocuments.filter(d => d.categorie === 'Sujet BEM').length;
+      ['Devoir', 'Composition'].forEach(cat => TRIMESTRES_LISTE.forEach(trim => {
+        const el = document.getElementById(`count-sub-${cat}-${trim}`);
+        if (el) el.textContent = docsParNiveau.filter(d => d.categorie === cat && d.trimestre === trim).length;
+      }));
+      SEQUENCES_LISTE.forEach(seq => {
+        const el = document.getElementById(`count-sub-Fiche pédagogique-${seq}`);
+        if (el) el.textContent = docsParNiveau.filter(d => d.categorie === 'Fiche pédagogique' && d.trimestre === seq).length;
+      });
+    }
+
+    function filtrerNiveau(niveau) {
+      niveauActif = niveau;
+      if (categorieActive === 'Sujet BEM') { categorieActive = 'TOUS'; sousCategorieActive = 'TOUS'; }
+      document.querySelectorAll('.tab-niveau').forEach(btn => {
+        if (btn.dataset.niveau === niveau) btn.className = 'tab-niveau active px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white shadow-sm cursor-pointer';
+        else if (btn.dataset.niveau === 'BEM') btn.className = 'tab-niveau px-4 py-2 rounded-xl text-sm font-bold bg-amber-100 text-amber-900 hover:bg-amber-200 cursor-pointer';
+        else btn.className = 'tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+      });
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      afficherDocuments();
+    }
+
+    function synchroniserFiltreSousCat() { sousCategorieActive = document.getElementById('filterTrimestre').value; mettreAJourStylesMenuGauche(); afficherDocuments(); }
+    function filtrerCategorie(cat, subCat = 'TOUS') { categorieActive = cat; sousCategorieActive = subCat; document.getElementById('filterTrimestre').value = subCat; mettreAJourStylesMenuGauche(); afficherDocuments(); }
+
+    function mettreAJourStylesMenuGauche() {
+      ['Devoir', 'Composition', 'Fiche pédagogique'].forEach(parentCat => {
+        const isOpen = categorieActive === parentCat;
+        const subBox = document.getElementById(`sub-${parentCat}`);
+        const arrow = document.getElementById(`arrow-${parentCat}`);
+        if (subBox) subBox.classList.toggle('hidden', !isOpen);
+        if (arrow) arrow.classList.toggle('rotate-180', isOpen);
+      });
+
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        const badge = btn.querySelector('span:last-child');
+        if (btn.dataset.cat === categorieActive) {
+          btn.className = 'cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow cursor-pointer';
+          if (badge) badge.className = 'text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white';
+        } else {
+          const isBem = btn.dataset.cat === 'Sujet BEM', isApp = btn.dataset.cat === 'Applications';
+          btn.className = `cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium ${isBem ? 'text-amber-200' : (isApp ? 'text-sky-200' : 'text-blue-100')} hover:bg-blue-900/60 cursor-pointer`;
+          if (badge) badge.className = `text-[11px] px-2 py-0.5 rounded-full bg-blue-950 ${isBem ? 'text-amber-300' : (isApp ? 'text-sky-300' : 'text-blue-300')}`;
+        }
+      });
+
+      document.querySelectorAll('.sub-btn').forEach(btn => {
+        const badge = btn.querySelector('span:last-child');
+        if (btn.dataset.cat === categorieActive && btn.dataset.sub === sousCategorieActive) {
+          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm cursor-pointer';
+          if (badge) badge.className = 'text-[10px] px-1.5 py-0.5 rounded-full bg-white/20 text-white';
+        } else {
+          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer';
+          if (badge) badge.className = 'text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300';
+        }
+      });
+
+      const breadcrumb = document.getElementById('activeFilterBreadcrumb');
+      if (categorieActive !== 'TOUS' || sousCategorieActive !== 'TOUS') {
+        const parts = [];
+        if (niveauActif !== 'TOUS' && categorieActive !== 'Sujet BEM') parts.push(`Niveau : ${niveauActif}`);
+        if (categorieActive !== 'TOUS') parts.push(`Catégorie : ${categorieActive}`);
+        if (sousCategorieActive !== 'TOUS') parts.push(`Sous-catégorie : ${sousCategorieActive}`);
+        document.getElementById('breadcrumbText').textContent = parts.join('  •  ');
+        breadcrumb.classList.remove('hidden');
+      } else {
+        breadcrumb.classList.add('hidden');
+      }
+    }
+
+    function afficherDocuments() {
+      document.getElementById('loadingState').classList.add('hidden');
+      const recherche = document.getElementById('searchInput').value.toLowerCase().trim();
+      const trimestre = document.getElementById('filterTrimestre').value;
+      const grid = document.getElementById('documentsGrid');
+      const empty = document.getElementById('emptyState');
+      const bemSection = document.getElementById('bemTableSection');
+
+      if (categorieActive === 'Sujet BEM') {
+        grid.classList.add('hidden'); empty.classList.add('hidden'); bemSection.classList.remove('hidden');
+        afficherTableauBEM(tousLesDocuments.filter(doc => doc.categorie === 'Sujet BEM' && (!recherche || (doc.titre && doc.titre.toLowerCase().includes(recherche)) || (doc.trimestre && doc.trimestre.toLowerCase().includes(recherche)))));
+        return;
+      }
+
+      bemSection.classList.add('hidden'); grid.classList.remove('hidden');
+      const filtres = tousLesDocuments.filter(doc => correspondAuNiveau(doc, niveauActif) && (trimestre === 'TOUS' || doc.trimestre === trimestre) && (categorieActive === 'TOUS' || doc.categorie === categorieActive) && (!recherche || (doc.titre && doc.titre.toLowerCase().includes(recherche)) || (doc.auteur && doc.auteur.toLowerCase().includes(recherche)) || (doc.nom_fichier && doc.nom_fichier.toLowerCase().includes(recherche)) || (doc.trimestre && doc.trimestre.toLowerCase().includes(recherche))));
+
+      if (filtres.length === 0) {
+        grid.innerHTML = '';
+        document.getElementById('emptyTitle').textContent = 'Aucun document disponible dans cette rubrique';
+        document.getElementById('emptyDesc').textContent = 'Modifiez vos filtres ou sélectionnez « Toutes les catégories ».';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.innerHTML = filtres.map(doc => genererCarteDocumentHTML(doc)).join('');
+      }
+    }
+
+    async function soumettreDocument(event) {
+      event.preventDefault();
+      if (!estAdmin) return;
+      const btn = document.getElementById('btnSubmitDoc');
+      const errBox = document.getElementById('uploadErrorMsg');
+      errBox.classList.add('hidden');
+
+      const editId = document.getElementById('editDocId').value;
+      const titre = document.getElementById('docTitre').value.trim();
+      const niveau = document.getElementById('docNiveau').value;
+      let trimestre = document.getElementById('docTrimestre').value;
+      const categorie = document.getElementById('docCategorie').value;
+      const auteur = document.getElementById('docAuteur').value.trim() || 'Prof. SALMI Ahmed';
+      if (categorie === 'Sujet BEM') trimestre = `${trimestre} (${document.getElementById('docTypeBem').value})`;
+
+      btn.disabled = true; btn.textContent = 'Enregistrement...';
+      try {
+        let fichierUrl = null, nomFichier = null;
+        if (sourceDocumentActive === 'externe') {
+          const lien = document.getElementById('docLienExterne').value.trim();
+          if (!lien) throw new Error('Veuillez coller un lien externe valide.');
+          fichierUrl = lien; nomFichier = document.getElementById('docFormatExterne').value;
+        } else {
+          const file = document.getElementById('docFichier').files[0];
+          if (file) {
+            const nomPropre = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+            const { error: uploadError } = await supabaseClient.storage.from('documents-cem').upload(nomPropre, file);
+            if (uploadError) throw uploadError;
+            fichierUrl = supabaseClient.storage.from('documents-cem').getPublicUrl(nomPropre).data.publicUrl;
+            nomFichier = file.name;
+          }
+        }
+        if (editId) {
+          const payload = { titre, niveau, trimestre, categorie, auteur };
+          if (fichierUrl) { payload.fichier_url = fichierUrl; payload.nom_fichier = nomFichier; }
+          const { error } = await supabaseClient.from('documents').update(payload).eq('id', editId);
+          if (error) throw error;
+          afficherToast('Document modifié !');
+        } else {
+          if (!fichierUrl) throw new Error('Veuillez sélectionner un fichier ou un lien.');
+          const { error } = await supabaseClient.from('documents').insert([{ titre, niveau, trimestre, categorie, auteur, fichier_url: fichierUrl, nom_fichier: nomFichier, telechargements: 0 }]);
+          if (error) throw error;
+          afficherToast('Document publié !');
+        }
+        fermerModalDepot(); await chargerDocuments();
+      } catch (err) {
+        errBox.textContent = 'Erreur : ' + (err.message || 'Opération impossible.'); errBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = editId ? 'Enregistrer les modifications' : 'Publier en ligne';
+      }
+    }
+
+    async function supprimerDocument(id) {
+      if (!estAdmin) return;
+      const doc = tousLesDocuments.find(d => String(d.id) === String(id));
+      if (!doc || !confirm(`Supprimer définitivement « ${doc.titre} » ?`)) return;
+      try {
+        if (doc.fichier_url && doc.fichier_url.includes('/documents-cem/')) {
+          const chemin = doc.fichier_url.split('/documents-cem/')[1];
+          if (chemin) await supabaseClient.storage.from('documents-cem').remove([decodeURIComponent(chemin)]);
+        }
+        const { error } = await supabaseClient.from('documents').delete().eq('id', id);
+        if (error) throw error;
+        afficherToast('Document supprimé.'); await chargerDocuments();
+      } catch (err) { alert('Erreur : ' + err.message); }
+    }
+
+    async function incrementerTelechargement(id, actuel) {
+      if (!supabaseClient) return;
+
+      const { data, error } = await supabaseClient.rpc(
+        'incrementer_telechargement',
+        { p_document_id: id }
+      );
+
+      if (error) {
+        console.error('Compteur téléchargements :', error);
+        return;
+      }
+
+      const nouveau = Number(data ?? (actuel || 0));
+
+      const doc = tousLesDocuments.find(d => String(d.id) === String(id));
+      if (doc) doc.telechargements = nouveau;
+
+      document.querySelectorAll(`.dl-count-${id}`).forEach(el => {
+        el.textContent = nouveau;
+      });
+
+      const total = tousLesDocuments.reduce(
+        (acc, d) => acc + Number(d.telechargements || 0),
+        0
+      );
+
+      document.getElementById('statTotalDownloads').textContent = total;
+    }
+
+    chargerDocuments();
+    initialiserAuthentification();
+  </script>
+</body>
+</html>
