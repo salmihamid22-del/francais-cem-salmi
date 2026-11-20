@@ -32,6 +32,7 @@
         </span>
         <button onclick="ouvrirModalRepartitions()" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Répartitions (4 niveaux)</button>
         <button onclick="ouvrirModalPlans()" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Plans des apprentissages</button>
+        <button onclick="ouvrirModalModelesProd()" class="bg-amber-500 hover:bg-amber-400 text-blue-950 border border-amber-300 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Modèles de production</button>
         <button onclick="filtrerCategorie('Applications', 'TOUS')" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Applications</button>
         <button id="btnAdminUpload" onclick="ouvrirModalDepot()" class="hidden bg-amber-400 hover:bg-amber-300 text-blue-950 font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer">+ Déposer un document</button>
         <button id="btnAdminAuth" onclick="gererClicAdmin()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer"><span id="adminAuthLabel">Espace Admin</span></button>
@@ -53,7 +54,7 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 class="text-lg font-bold text-slate-900">Bibliothèque numérique de langue française (Cycle Moyen)</h2>
-          <p class="text-sm text-slate-600 mt-0.5">Devoirs (T1-T3), compositions (T1-T3), fiches pédagogiques (Séquences 01 à 07), répartitions, plans, applications et sujets du BEM.</p>
+          <p class="text-sm text-slate-600 mt-0.5">Devoirs (T1-T3), compositions (T1-T3), fiches pédagogiques (Séquences 01 à 07), modèles de production, répartitions, plans, applications et sujets du BEM.</p>
         </div>
         <div class="flex flex-wrap items-center gap-3 text-sm">
           <div class="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl border border-blue-100 text-center">
@@ -89,7 +90,7 @@
             <option value="Trimestre 2">2ème Trimestre (Trim 2)</option>
             <option value="Trimestre 3">3ème Trimestre (Trim 3)</option>
           </optgroup>
-          <optgroup label="Séquences (Fiches pédagogiques)">
+          <optgroup label="Séquences (Fiches & Modèles)">
             <option value="Séquence 01">Séquence 01</option>
             <option value="Séquence 02">Séquence 02</option>
             <option value="Séquence 03">Séquence 03</option>
@@ -169,6 +170,12 @@
             </div>
           </div>
 
+          <!-- Modèles de production -->
+          <button type="button" onclick="ouvrirModalModelesProd()" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-amber-200 hover:bg-blue-900/60 transition cursor-pointer text-left">
+            <span>Modèles de production</span>
+            <span id="count-cat-Modèle de production" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-amber-300">0</span>
+          </button>
+
           <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
           <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
           <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-sky-200 hover:bg-blue-900/60 cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-sky-300">0</span></button>
@@ -229,6 +236,60 @@
       <p>Plateforme dédiée à l'enseignement moyen en Algérie (1AM • 2AM • 3AM • 4AM • BEM)</p>
     </div>
   </footer>
+
+  <!-- Modale Modèles de production -->
+  <div id="modalModelesProd" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-emerald-800 text-white px-6 py-4 flex items-center justify-between gap-3">
+        <div>
+          <h3 class="font-extrabold text-lg">Modèles de production écrite</h3>
+          <p class="text-xs text-blue-100">Catégorie « Modèle de production » • Années 1AM à 4AM • Séquences 01 à 07</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnAdminAjouterModeleProd" type="button" onclick="ouvrirDepotModeleProd()" class="hidden text-xs font-bold bg-amber-400 hover:bg-amber-300 text-blue-950 px-3 py-1.5 rounded-lg cursor-pointer">+ Déposer un modèle</button>
+          <button type="button" onclick="fermerModalModelesProd()" class="text-white text-2xl font-bold cursor-pointer">&times;</button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 bg-slate-50 space-y-5">
+        <!-- Étape 1 : Catégorie -->
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">1. Catégorie</span>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-900 text-white shadow-sm">
+              Modèle de production
+            </button>
+          </div>
+        </div>
+
+        <!-- Étape 2 : Année -->
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">2. Choisissez l'année</span>
+          <div id="mpAnneeBtns" class="flex flex-wrap gap-2">
+            <button type="button" data-mp-year="1AM" onclick="selectionnerAnneeMP('1AM')" class="mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">1AM</button>
+            <button type="button" data-mp-year="2AM" onclick="selectionnerAnneeMP('2AM')" class="mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">2AM</button>
+            <button type="button" data-mp-year="3AM" onclick="selectionnerAnneeMP('3AM')" class="mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">3AM</button>
+            <button type="button" data-mp-year="4AM" onclick="selectionnerAnneeMP('4AM')" class="mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">4AM</button>
+          </div>
+        </div>
+
+        <!-- Étape 3 : Séquence 01 à 07 -->
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">3. Choisissez la séquence</span>
+          <div id="mpSequencesGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+            <p class="col-span-full text-xs text-slate-500 italic">Sélectionnez d'abord une année (1AM, 2AM, 3AM ou 4AM).</p>
+          </div>
+        </div>
+
+        <!-- Résultats des modèles déposés -->
+        <div id="mpResultatsContenu"></div>
+      </div>
+
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
+        <button type="button" onclick="fermerModalModelesProd()" class="bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modale Aperçu -->
   <div id="modalApercu" class="hidden fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[60] flex items-center justify-center p-2 sm:p-4">
@@ -342,7 +403,7 @@
         <input type="hidden" id="editDocId" value="" />
         <div>
           <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Titre *</label>
-          <input type="text" id="docTitre" required placeholder="Ex : Fiche de compréhension — Séquence 01" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none" />
+          <input type="text" id="docTitre" required placeholder="Ex : Modèle de production — Séquence 01" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm outline-none" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -352,6 +413,7 @@
               <option value="Devoir">Devoir</option>
               <option value="Composition">Composition</option>
               <option value="Fiche pédagogique">Fiche pédagogique</option>
+              <option value="Modèle de production">Modèle de production</option>
               <option value="Répartition annuelle">Répartition annuelle</option>
               <option value="Plan d'apprentissage">Plan d'apprentissage</option>
               <option value="Applications">Applications</option>
@@ -440,6 +502,7 @@
     const SEQUENCES_LISTE = ['Séquence 01', 'Séquence 02', 'Séquence 03', 'Séquence 04', 'Séquence 05', 'Séquence 06', 'Séquence 07'];
     const TRIMESTRES_LISTE = ['Trimestre 1', 'Trimestre 2', 'Trimestre 3'];
     const ANNEES_BEM_LISTE = ['BEM 2026', 'BEM 2025', 'BEM 2024', 'BEM 2023', 'BEM 2022', 'BEM 2021', 'BEM 2020', 'BEM 2019', 'BEM 2018', 'BEM 2017', 'BEM 2016', 'BEM 2015', 'BEM Blanc 2026', 'BEM Blanc'];
+    const MP_SEQUENCES = ['01', '02', '03', '04', '05', '06', '07'];
 
     let supabaseClient = null;
 
@@ -467,6 +530,8 @@
     let sousCategorieActive = 'TOUS';
     let niveauRepartitionActif = '1AM';
     let niveauPlanActif = '1AM';
+    let mpAnneeActive = null;
+    let mpSequenceActive = null;
     let sourceDocumentActive = 'local';
     let estAdmin = false;
     let authInitialisee = false;
@@ -476,6 +541,87 @@
       if (doc.niveau === niveauCible) return true;
       if (doc.niveau === 'Tous les niveaux' && ['1AM', '2AM', '3AM', '4AM'].includes(niveauCible)) return true;
       return false;
+    }
+
+    function ouvrirModalModelesProd() {
+      mpAnneeActive = null;
+      mpSequenceActive = null;
+      document.querySelectorAll('.mp-year-btn').forEach((btn) => {
+        btn.className = 'mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer';
+      });
+      document.getElementById('mpSequencesGrid').innerHTML =
+        '<p class="col-span-full text-xs text-slate-500 italic">Sélectionnez d\'abord une année (1AM, 2AM, 3AM ou 4AM).</p>';
+      document.getElementById('mpResultatsContenu').innerHTML = '';
+      document.getElementById('modalModelesProd').classList.remove('hidden');
+    }
+
+    function fermerModalModelesProd() {
+      document.getElementById('modalModelesProd').classList.add('hidden');
+    }
+
+    function selectionnerAnneeMP(annee) {
+      mpAnneeActive = annee;
+      mpSequenceActive = null;
+      document.getElementById('mpResultatsContenu').innerHTML = '';
+
+      document.querySelectorAll('.mp-year-btn').forEach((btn) => {
+        const actif = btn.dataset.mpYear === annee;
+        btn.className = actif
+          ? 'mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white border border-blue-900 shadow-sm cursor-pointer'
+          : 'mp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer';
+      });
+
+      const grid = document.getElementById('mpSequencesGrid');
+      grid.innerHTML = '';
+
+      MP_SEQUENCES.forEach((seq) => {
+        const nomSeq = `Séquence ${seq}`;
+        const nbDocs = tousLesDocuments.filter(
+          (d) => d.categorie === 'Modèle de production' && correspondAuNiveau(d, annee) && d.trimestre === nomSeq
+        ).length;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.mpSeq = seq;
+        btn.className = 'mp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
+        btn.innerHTML = `<span>Séquence ${seq}</span><span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">${nbDocs}</span>`;
+        btn.onclick = () => selectionnerSequenceMP(seq);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectionnerSequenceMP(seq) {
+      mpSequenceActive = seq;
+      const nomSeq = `Séquence ${seq}`;
+
+      document.querySelectorAll('.mp-seq-btn').forEach((btn) => {
+        const actif = btn.dataset.mpSeq === seq;
+        btn.className = actif
+          ? 'mp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-emerald-700 text-white border border-emerald-700 shadow-sm cursor-pointer flex items-center justify-between gap-1'
+          : 'mp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
+      });
+
+      const docsFiltres = tousLesDocuments.filter(
+        (d) => d.categorie === 'Modèle de production' && correspondAuNiveau(d, mpAnneeActive) && d.trimestre === nomSeq
+      );
+
+      const conteneur = document.getElementById('mpResultatsContenu');
+      if (docsFiltres.length === 0) {
+        conteneur.innerHTML = `
+          <div class="text-center py-10 bg-white rounded-2xl border border-dashed border-slate-300 p-6">
+            <p class="font-bold text-slate-800">Aucun modèle de production déposé pour ${mpAnneeActive} — ${nomSeq}</p>
+            ${estAdmin ? `<button type="button" onclick="ouvrirDepotModeleProd()" class="mt-3 bg-amber-400 hover:bg-amber-300 text-blue-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">+ Déposer un modèle pour ${mpAnneeActive} (${nomSeq})</button>` : ''}
+          </div>`;
+      } else {
+        conteneur.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map((doc) => genererCarteDocumentHTML(doc)).join('')}</div>`;
+      }
+    }
+
+    function ouvrirDepotModeleProd() {
+      ouvrirModalDepot();
+      document.getElementById('docCategorie').value = 'Modèle de production';
+      adapterOptionsSousCategorieFormulaire(mpSequenceActive ? `Séquence ${mpSequenceActive}` : 'Séquence 01');
+      if (mpAnneeActive) document.getElementById('docNiveau').value = mpAnneeActive;
     }
 
     function extraireIdDrive(url) {
@@ -661,7 +807,7 @@
     }
 
     function mettreAJourInterfaceAdmin() {
-      ['btnAdminUpload', 'adminBanner', 'btnAdminAjouterRepartition', 'btnAdminAjouterPlan', 'btnAdminAjouterBEM'].forEach(id => {
+      ['btnAdminUpload', 'adminBanner', 'btnAdminAjouterRepartition', 'btnAdminAjouterPlan', 'btnAdminAjouterBEM', 'btnAdminAjouterModeleProd'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.toggle('hidden', !estAdmin);
       });
@@ -669,6 +815,11 @@
       afficherDocuments();
       if (!document.getElementById('modalRepartitions').classList.contains('hidden')) changerOngletRepartition(niveauRepartitionActif);
       if (!document.getElementById('modalPlans').classList.contains('hidden')) changerOngletPlan(niveauPlanActif);
+      if (!document.getElementById('modalModelesProd').classList.contains('hidden') && mpAnneeActive) {
+        const seqSauvegardee = mpSequenceActive;
+        selectionnerAnneeMP(mpAnneeActive);
+        if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
+      }
     }
 
     function gererClicAdmin() {
@@ -787,7 +938,7 @@
         selectSub.innerHTML = ANNEES_BEM_LISTE.map(a => `<option value="${a}">${a}</option>`).join('');
         document.getElementById('docNiveau').value = 'BEM';
         if (natureBemForcee) document.getElementById('docTypeBem').value = natureBemForcee;
-      } else if (cat === 'Fiche pédagogique') {
+      } else if (cat === 'Fiche pédagogique' || cat === 'Modèle de production') {
         labelSub.textContent = 'Sous-catégorie (Séquence 01 à 07) *';
         selectSub.innerHTML = SEQUENCES_LISTE.map(s => `<option value="${s}">${s}</option>`).join('') + `<option value="Annales">Hors séquence / Général</option>`;
       } else if (cat === 'Devoir' || cat === 'Composition') {
@@ -907,6 +1058,11 @@
         document.getElementById('statTotalDownloads').textContent = tousLesDocuments.reduce((acc, d) => acc + (d.telechargements || 0), 0);
         mettreAJourCompteursCategories();
         afficherDocuments();
+        if (!document.getElementById('modalModelesProd').classList.contains('hidden') && mpAnneeActive) {
+          const seqSauvegardee = mpSequenceActive;
+          selectionnerAnneeMP(mpAnneeActive);
+          if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
+        }
       } catch (err) {
         badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span> Hors ligne';
         document.getElementById('loadingState').classList.add('hidden');
@@ -919,7 +1075,7 @@
     function mettreAJourCompteursCategories() {
       const docsParNiveau = tousLesDocuments.filter(doc => correspondAuNiveau(doc, niveauActif));
       document.getElementById('count-cat-TOUS').textContent = docsParNiveau.length;
-      ['Devoir', 'Composition', 'Fiche pédagogique', 'Répartition annuelle', "Plan d'apprentissage", 'Applications'].forEach(cat => {
+      ['Devoir', 'Composition', 'Fiche pédagogique', 'Modèle de production', 'Répartition annuelle', "Plan d'apprentissage", 'Applications'].forEach(cat => {
         const el = document.getElementById(`count-cat-${cat}`);
         if (el) el.textContent = docsParNiveau.filter(d => d.categorie === cat).length;
       });
