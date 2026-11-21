@@ -6,14 +6,30 @@
   <title>Le Français au CEM — Prof. SALMI Ahmed</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>body { font-family: 'Inter', sans-serif; }</style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes defilementBandeau {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .ticker-track {
+      display: inline-block;
+      padding-left: 100%;
+      white-space: nowrap;
+      animation: defilementBandeau 34s linear infinite;
+      will-change: transform;
+    }
+    #bandeauImportant:hover .ticker-track {
+      animation-play-state: paused;
+    }
+  </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
   <iframe id="hiddenDownloadFrame" class="hidden" title="Téléchargement direct"></iframe>
 
-  <!-- En-tête -->
+  <!-- En-tête + Bandeau fixe en haut de l'écran -->
   <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white shadow-lg sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -38,13 +54,31 @@
         <button id="btnAdminAuth" onclick="gererClicAdmin()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer"><span id="adminAuthLabel">Espace Admin</span></button>
       </div>
     </div>
+
+    <!-- Bandeau déroulant fichiers importants (reste fixe avec l'en-tête) -->
+    <div id="bandeauImportant" class="hidden bg-[#071026] text-white border-t-2 border-amber-400 shadow-lg overflow-hidden">
+      <div class="max-w-7xl mx-auto flex items-center">
+        <span class="bg-amber-400 text-blue-950 font-black text-xs sm:text-sm uppercase tracking-wider px-4 py-2.5 shrink-0 z-10 shadow-md flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+          Important
+        </span>
+        <div class="overflow-hidden flex-1 py-2">
+          <div id="contenuBandeau" class="ticker-track text-sm sm:text-base font-bold tracking-wide text-white"></div>
+        </div>
+      </div>
+    </div>
   </header>
 
   <!-- Bandeau Admin -->
   <div id="adminBanner" class="hidden bg-amber-50 border-b border-amber-200 text-amber-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between text-xs font-semibold">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
       <span>Mode Administrateur activé (Prof. SALMI Ahmed) — Ajout (fichier local ou lien externe), modification et suppression actifs.</span>
-      <button onclick="deconnecterAdmin()" class="underline text-amber-900 hover:text-red-700 cursor-pointer">Quitter le mode Admin</button>
+      <div class="flex items-center gap-4">
+        <button onclick="ouvrirModalGestionBandeau()" class="bg-red-100 hover:bg-red-200 text-red-900 border border-red-300 px-3 py-1 rounded-lg font-bold cursor-pointer">
+          Gérer le bandeau déroulant (<span id="countAnnoncesBandeau">0</span>)
+        </button>
+        <button onclick="deconnecterAdmin()" class="underline text-amber-900 hover:text-red-700 cursor-pointer">Quitter le mode Admin</button>
+      </div>
     </div>
   </div>
 
@@ -108,7 +142,7 @@
   <!-- Contenu principal : Panneau bleu nuit à gauche + Grille / Tableau BEM à droite -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
     <div class="flex flex-col lg:flex-row items-start gap-6">
-      <aside class="w-full lg:w-72 shrink-0 bg-[#0b1736] text-white rounded-2xl shadow-xl border border-blue-900/60 overflow-hidden lg:sticky lg:top-24">
+      <aside class="w-full lg:w-72 shrink-0 bg-[#0b1736] text-white rounded-2xl shadow-xl border border-blue-900/60 overflow-hidden lg:sticky lg:top-36">
         <div class="bg-[#071026] px-5 py-4 border-b border-blue-900/60">
           <h3 class="font-extrabold text-sm tracking-wide uppercase text-white">Catégories & Sous-catégories</h3>
           <p class="text-[11px] text-blue-300">Cliquez sur la flèche pour déplier</p>
@@ -237,6 +271,23 @@
     </div>
   </footer>
 
+  <!-- Modale Gestion du Bandeau Déroulant (Admin) -->
+  <div id="modalGestionBandeau" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-[#071026] text-white px-6 py-4 flex items-center justify-between border-b-2 border-amber-400">
+        <div>
+          <h3 class="font-extrabold text-base">Annonces actives dans le bandeau déroulant</h3>
+          <p class="text-xs text-amber-200">Les annonces disparaissent automatiquement à la fin de leur durée.</p>
+        </div>
+        <button onclick="fermerModalGestionBandeau()" class="text-white text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+      <div id="listeAnnoncesBandeauAdmin" class="p-6 overflow-y-auto flex-1 space-y-3 bg-slate-50"></div>
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
+        <button onclick="fermerModalGestionBandeau()" class="bg-slate-900 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modale Modèles de production -->
   <div id="modalModelesProd" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
@@ -252,7 +303,6 @@
       </div>
 
       <div class="p-6 overflow-y-auto flex-1 bg-slate-50 space-y-5">
-        <!-- Étape 1 : Catégorie -->
         <div>
           <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">1. Catégorie</span>
           <div class="flex flex-wrap gap-2">
@@ -262,7 +312,6 @@
           </div>
         </div>
 
-        <!-- Étape 2 : Année -->
         <div>
           <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">2. Choisissez l'année</span>
           <div id="mpAnneeBtns" class="flex flex-wrap gap-2">
@@ -273,7 +322,6 @@
           </div>
         </div>
 
-        <!-- Étape 3 : Séquence 01 à 07 -->
         <div>
           <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">3. Choisissez la séquence</span>
           <div id="mpSequencesGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
@@ -281,7 +329,6 @@
           </div>
         </div>
 
-        <!-- Résultats des modèles déposés -->
         <div id="mpResultatsContenu"></div>
       </div>
 
@@ -483,6 +530,25 @@
           </div>
         </div>
 
+        <!-- Option Bandeau Déroulant Important -->
+        <div class="bg-blue-950/5 p-3.5 rounded-xl border border-blue-900/20 space-y-2.5">
+          <label class="flex items-center gap-2.5 text-xs font-bold text-blue-950 cursor-pointer">
+            <input type="checkbox" id="docCheckBandeau" onchange="document.getElementById('zoneDureeBandeau').classList.toggle('hidden', !this.checked)" class="w-4 h-4 accent-blue-900 rounded cursor-pointer" />
+            <span>Afficher ce fichier dans le bandeau déroulant (Important)</span>
+          </label>
+          <div id="zoneDureeBandeau" class="hidden pl-6 flex items-center justify-between gap-2">
+            <label for="docDureeBandeau" class="text-xs font-semibold text-slate-700">Durée d'affichage :</label>
+            <select id="docDureeBandeau" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-800 outline-none">
+              <option value="24">24 heures (1 jour)</option>
+              <option value="48">48 heures (2 jours)</option>
+              <option value="72" selected>3 jours (72 heures)</option>
+              <option value="168">1 semaine (7 jours)</option>
+              <option value="336">2 semaines (14 jours)</option>
+              <option value="720">1 mois (30 jours)</option>
+            </select>
+          </div>
+        </div>
+
         <div id="uploadErrorMsg" class="hidden text-xs font-semibold text-red-600 bg-red-50 p-3 rounded-xl"></div>
 
         <div class="pt-2 flex justify-end gap-3">
@@ -525,6 +591,7 @@
     }
 
     let tousLesDocuments = [];
+    let annoncesBandeauActives = [];
     let niveauActif = 'TOUS';
     let categorieActive = 'TOUS';
     let sousCategorieActive = 'TOUS';
@@ -536,6 +603,108 @@
     let estAdmin = false;
     let authInitialisee = false;
 
+    /* ========================================================================
+       BANDEAU DÉROULANT (CHARGEMENT, CLIC, AJOUT ET SUPPRESSION)
+       ======================================================================== */
+    async function chargerBandeauImportant() {
+      if (!supabaseClient) return;
+      try {
+        const maintenantISO = new Date().toISOString();
+        const { data, error } = await supabaseClient
+          .from('bandeau_annonces')
+          .select('*')
+          .gt('expire_le', maintenantISO)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Erreur chargement bandeau :', error);
+          return;
+        }
+
+        annoncesBandeauActives = data || [];
+        const bandeau = document.getElementById('bandeauImportant');
+        const contenu = document.getElementById('contenuBandeau');
+        const badgeCount = document.getElementById('countAnnoncesBandeau');
+        if (badgeCount) badgeCount.textContent = annoncesBandeauActives.length;
+
+        if (annoncesBandeauActives.length === 0) {
+          bandeau.classList.add('hidden');
+          contenu.innerHTML = '';
+          return;
+        }
+
+        contenu.innerHTML = annoncesBandeauActives.map((item) => {
+          const badgeNiv = item.niveau ? `<span class="bg-blue-700 text-amber-300 border border-amber-400/50 px-2.5 py-0.5 rounded-md text-xs sm:text-sm font-extrabold mr-2">${item.niveau}</span>` : '';
+          return `<span class="inline-flex items-center">${badgeNiv}<span class="text-white">${item.titre}</span> <a href="${item.url}" onclick="ouvrirLienBandeau(event, '${item.url.replace(/'/g, "\\'")}', '${(item.titre || '').replace(/'/g, "\\'")}', '${(item.niveau || '').replace(/'/g, "\\'")}')" class="ml-3 bg-amber-400 hover:bg-amber-300 text-blue-950 px-2.5 py-0.5 rounded-md text-xs sm:text-sm font-extrabold no-underline transition cursor-pointer">Consulter ↗</a></span>`;
+        }).join('<span class="mx-8 text-amber-400 font-black">★</span>');
+
+        bandeau.classList.remove('hidden');
+      } catch (e) {
+        console.error('Exception bandeau :', e);
+      }
+    }
+
+    function ouvrirLienBandeau(event, url, titre, niveau) {
+      const docCorrespondant = tousLesDocuments.find(d => d.fichier_url === url);
+      if (docCorrespondant) {
+        event.preventDefault();
+        ouvrirApercuDocument(docCorrespondant.id);
+        return;
+      }
+      if (url && !url.includes('.exe') && !url.includes('.zip')) {
+        event.preventDefault();
+        document.getElementById('apercuTitre').textContent = titre || 'Document important';
+        document.getElementById('apercuBadgeNiveau').textContent = niveau || 'Important';
+        document.getElementById('apercuBadgeCategorie').textContent = 'Annonce importante';
+        const btnDl = document.getElementById('apercuBtnTelecharger');
+        btnDl.textContent = 'Télécharger / Ouvrir';
+        btnDl.onclick = () => window.open(preparerUrlTelechargement(url, titre), '_blank', 'noopener,noreferrer');
+        const estPdf = url.toLowerCase().includes('.pdf');
+        document.getElementById('apercuIframe').src = preparerUrlApercu(url, estPdf, false);
+        document.getElementById('modalApercu').classList.remove('hidden');
+      }
+    }
+
+    function ouvrirModalGestionBandeau() {
+      const conteneur = document.getElementById('listeAnnoncesBandeauAdmin');
+      if (annoncesBandeauActives.length === 0) {
+        conteneur.innerHTML = '<p class="text-center text-sm text-slate-500 py-8">Aucune annonce active dans le bandeau déroulant.</p>';
+      } else {
+        conteneur.innerHTML = annoncesBandeauActives.map(item => {
+          const fin = new Date(item.expire_le).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+              <div class="min-w-0">
+                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded bg-blue-100 text-blue-900">${item.niveau || 'Tous'}</span>
+                <p class="font-bold text-sm text-slate-900 truncate mt-1">${item.titre}</p>
+                <p class="text-xs text-slate-500">Expire le : <strong>${fin}</strong></p>
+              </div>
+              <button onclick="supprimerAnnonceBandeau('${item.id}')" class="shrink-0 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded-lg cursor-pointer">Retirer</button>
+            </div>`;
+        }).join('');
+      }
+      document.getElementById('modalGestionBandeau').classList.remove('hidden');
+    }
+
+    function fermerModalGestionBandeau() {
+      document.getElementById('modalGestionBandeau').classList.add('hidden');
+    }
+
+    async function supprimerAnnonceBandeau(id) {
+      if (!estAdmin || !supabaseClient) return;
+      const { error } = await supabaseClient.from('bandeau_annonces').delete().eq('id', id);
+      if (error) {
+        afficherToast('Erreur lors de la suppression.');
+        return;
+      }
+      afficherToast('Annonce retirée du bandeau.');
+      await chargerBandeauImportant();
+      ouvrirModalGestionBandeau();
+    }
+
+    /* ========================================================================
+       FONCTIONS DU PORTAIL
+       ======================================================================== */
     function correspondAuNiveau(doc, niveauCible) {
       if (niveauCible === 'TOUS') return true;
       if (doc.niveau === niveauCible) return true;
@@ -969,6 +1138,8 @@
       document.getElementById('fichierEditHint').classList.add('hidden');
       document.getElementById('uploadErrorMsg').classList.add('hidden');
       document.getElementById('formDepot').reset();
+      document.getElementById('docCheckBandeau').checked = false;
+      document.getElementById('zoneDureeBandeau').classList.add('hidden');
       document.getElementById('docAuteur').value = 'Prof. SALMI Ahmed';
       if (categorieActive !== 'TOUS') document.getElementById('docCategorie').value = categorieActive;
       adapterOptionsSousCategorieFormulaire(sousCategorieActive !== 'TOUS' ? sousCategorieActive : null);
@@ -991,6 +1162,8 @@
       document.getElementById('docCategorie').value = doc.categorie;
       adapterOptionsSousCategorieFormulaire(doc.trimestre, doc.categorie === 'Sujet BEM' ? detecterNatureBEM(doc) : null);
       document.getElementById('docAuteur').value = doc.auteur || 'Prof. SALMI Ahmed';
+      document.getElementById('docCheckBandeau').checked = false;
+      document.getElementById('zoneDureeBandeau').classList.add('hidden');
 
       if (doc.fichier_url && !doc.fichier_url.includes('supabase.co')) {
         changerSourceDocument('externe');
@@ -1193,6 +1366,9 @@
       let trimestre = document.getElementById('docTrimestre').value;
       const categorie = document.getElementById('docCategorie').value;
       const auteur = document.getElementById('docAuteur').value.trim() || 'Prof. SALMI Ahmed';
+      const afficherBandeau = document.getElementById('docCheckBandeau').checked;
+      const heuresBandeau = parseInt(document.getElementById('docDureeBandeau').value, 10) || 72;
+
       if (categorie === 'Sujet BEM') trimestre = `${trimestre} (${document.getElementById('docTypeBem').value})`;
 
       btn.disabled = true; btn.textContent = 'Enregistrement...';
@@ -1212,11 +1388,18 @@
             nomFichier = file.name;
           }
         }
+
+        let urlPourBandeau = fichierUrl;
+
         if (editId) {
           const payload = { titre, niveau, trimestre, categorie, auteur };
           if (fichierUrl) { payload.fichier_url = fichierUrl; payload.nom_fichier = nomFichier; }
           const { error } = await supabaseClient.from('documents').update(payload).eq('id', editId);
           if (error) throw error;
+          if (!urlPourBandeau) {
+            const ancienDoc = tousLesDocuments.find(d => String(d.id) === String(editId));
+            urlPourBandeau = ancienDoc ? ancienDoc.fichier_url : null;
+          }
           afficherToast('Document modifié !');
         } else {
           if (!fichierUrl) throw new Error('Veuillez sélectionner un fichier ou un lien.');
@@ -1224,7 +1407,25 @@
           if (error) throw error;
           afficherToast('Document publié !');
         }
-        fermerModalDepot(); await chargerDocuments();
+
+        if (afficherBandeau && urlPourBandeau) {
+          const dateExpiration = new Date();
+          dateExpiration.setHours(dateExpiration.getHours() + heuresBandeau);
+          const { error: bandeauError } = await supabaseClient.from('bandeau_annonces').insert([{
+            titre: titre,
+            niveau: niveau,
+            url: urlPourBandeau,
+            expire_le: dateExpiration.toISOString()
+          }]);
+          if (bandeauError) {
+            console.error('Erreur bandeau :', bandeauError);
+            afficherToast('Document publié, mais erreur sur le bandeau.');
+          }
+        }
+
+        fermerModalDepot();
+        await chargerDocuments();
+        await chargerBandeauImportant();
       } catch (err) {
         errBox.textContent = 'Erreur : ' + (err.message || 'Opération impossible.'); errBox.classList.remove('hidden');
       } finally {
@@ -1243,7 +1444,12 @@
         }
         const { error } = await supabaseClient.from('documents').delete().eq('id', id);
         if (error) throw error;
-        afficherToast('Document supprimé.'); await chargerDocuments();
+        if (doc.fichier_url) {
+          await supabaseClient.from('bandeau_annonces').delete().eq('url', doc.fichier_url);
+        }
+        afficherToast('Document supprimé.');
+        await chargerDocuments();
+        await chargerBandeauImportant();
       } catch (err) { alert('Erreur : ' + err.message); }
     }
 
@@ -1278,6 +1484,7 @@
     }
 
     chargerDocuments();
+    chargerBandeauImportant();
     initialiserAuthentification();
   </script>
 </body>
