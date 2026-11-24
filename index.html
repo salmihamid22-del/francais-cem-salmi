@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Le Français au CEM — Prof. SALMI Ahmed</title>
-  <link rel="icon" type="image/jpeg" href="/logo.JPG" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-[#131f2e] flex items-center justify-center shrink-0">
-          <img src="/logo.JPG" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <img src="/logo.jpg" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
           <svg style="display:none;" viewBox="0 0 120 120" class="w-full h-full">
             <circle cx="60" cy="60" r="56" fill="#131f2e" stroke="#d4af37" stroke-width="3"/>
             <text x="60" y="66" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="38" fill="#d4af37">SA</text>
@@ -55,16 +55,23 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <span id="dbStatusBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 border border-white/20">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>Connexion...
-        </span>
-        <button onclick="ouvrirModalRepartitions()" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Répartitions (4 niveaux)</button>
-        <button onclick="ouvrirModalPlans()" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Plans des apprentissages</button>
-        <button onclick="ouvrirModalModelesProd()" class="bg-amber-500 hover:bg-amber-400 text-blue-950 border border-amber-300 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Modèles de production</button>
-        <button onclick="filtrerCategorie('Applications', 'TOUS')" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Applications</button>
-        <button id="btnAdminUpload" onclick="ouvrirModalDepot()" class="hidden bg-amber-400 hover:bg-amber-300 text-blue-950 font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer">+ Déposer un document</button>
-        <button id="btnAdminAuth" onclick="gererClicAdmin()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer"><span id="adminAuthLabel">Espace Admin</span></button>
+      <div class="flex flex-col items-center lg:items-end gap-2 w-full lg:w-auto">
+        <!-- Ligne 1 : En ligne, Plans, Répartitions, Fiches -->
+        <div class="flex flex-wrap items-center justify-center lg:justify-end gap-2">
+          <span id="dbStatusBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 border border-white/20">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>Connexion...
+          </span>
+          <button type="button" onclick="ouvrirModalPlans()" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Plans</button>
+          <button type="button" onclick="ouvrirModalRepartitions()" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Répartitions</button>
+          <button type="button" onclick="ouvrirModalFichesPedag()" class="bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-white border border-amber-200/70 font-extrabold text-xs px-4 py-2 rounded-xl shadow-md shadow-rose-950/30 ring-1 ring-white/25 transition cursor-pointer">Fiches pédagogiques</button>
+        </div>
+        <!-- Ligne 2 : Modèles, Applications, Admin (+ Déposer si Admin) -->
+        <div class="flex flex-wrap items-center justify-center lg:justify-end gap-2">
+          <button type="button" onclick="ouvrirModalModelesProd()" class="bg-amber-500 hover:bg-amber-400 text-blue-950 border border-amber-300 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Modèles</button>
+          <button type="button" onclick="filtrerCategorie('Applications', 'TOUS')" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 font-bold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer">Applications</button>
+          <button type="button" id="btnAdminUpload" onclick="ouvrirModalDepot()" class="hidden bg-amber-400 hover:bg-amber-300 text-blue-950 font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer">+ Déposer un document</button>
+          <button type="button" id="btnAdminAuth" onclick="gererClicAdmin()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer"><span id="adminAuthLabel">Admin</span></button>
+        </div>
       </div>
     </div>
 
@@ -103,18 +110,18 @@
           <h2 class="text-lg font-bold text-slate-900">Bibliothèque numérique de langue française (Cycle Moyen)</h2>
           <p class="text-sm text-slate-600 mt-0.5">Devoirs (T1-T3), compositions (T1-T3), fiches pédagogiques (Séquences 01 à 07), modèles de production, répartitions, plans, applications et sujets du BEM.</p>
         </div>
-        <div class="flex flex-nowrap items-stretch gap-2.5 sm:gap-3 text-sm shrink-0 overflow-x-auto">
-          <div class="bg-blue-50 text-blue-900 px-3.5 py-2 rounded-xl border border-blue-100 text-center shrink-0">
-            <span id="statTotalDocs" class="block text-xl font-extrabold">0</span>
-            <span class="text-xs text-blue-700 font-medium whitespace-nowrap">Documents en ligne</span>
+        <div class="flex flex-nowrap items-stretch gap-2 text-xs shrink-0 overflow-x-auto">
+          <div class="bg-blue-50 text-blue-900 px-3 py-1.5 rounded-xl border border-blue-100 text-center shrink-0">
+            <span id="statTotalDocs" class="block text-sm font-extrabold leading-tight">0</span>
+            <span class="text-[11px] text-blue-700 font-medium whitespace-nowrap">Documents en ligne</span>
           </div>
-          <div class="bg-emerald-50 text-emerald-900 px-3.5 py-2 rounded-xl border border-emerald-100 text-center shrink-0">
-            <span id="statTotalDownloads" class="block text-xl font-extrabold">0</span>
-            <span class="text-xs text-emerald-700 font-medium whitespace-nowrap">Téléchargements</span>
+          <div class="bg-emerald-50 text-emerald-900 px-3 py-1.5 rounded-xl border border-emerald-100 text-center shrink-0">
+            <span id="statTotalDownloads" class="block text-sm font-extrabold leading-tight">0</span>
+            <span class="text-[11px] text-emerald-700 font-medium whitespace-nowrap">Téléchargements</span>
           </div>
-          <div class="bg-indigo-50 text-indigo-900 px-3.5 py-2 rounded-xl border border-indigo-100 text-center shrink-0">
-            <span id="statTotalVisitors" class="block text-xl font-extrabold">1</span>
-            <span class="text-xs text-indigo-700 font-medium whitespace-nowrap">Visiteurs</span>
+          <div class="bg-indigo-50 text-indigo-900 px-3 py-1.5 rounded-xl border border-indigo-100 text-center shrink-0">
+            <span id="statTotalVisitors" class="block text-sm font-extrabold leading-tight">1</span>
+            <span class="text-[11px] text-indigo-700 font-medium whitespace-nowrap">Visiteurs</span>
           </div>
         </div>
       </div>
@@ -178,9 +185,9 @@
           </button>
 
           <!-- Fiche pédagogique -->
-          <button type="button" onclick="ouvrirModalFichesPedag()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer text-left">
-            <span>Fiche pédagogique</span>
-            <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
+          <button type="button" onclick="ouvrirModalFichesPedag()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-rose-100 bg-rose-950/50 hover:bg-rose-900/70 border border-rose-400/40 shadow-sm cursor-pointer text-left">
+            <span>Fiches pédagogiques</span>
+            <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-rose-500/25 text-rose-200 border border-rose-300/60 shadow-sm">0</span>
           </button>
 
           <!-- Modèles de production -->
@@ -445,23 +452,23 @@
 
   <!-- Modale Fiches pédagogiques (Niveaux 1AM-4AM -> Séquences 01 à 07) -->
   <div id="modalFichesPedag" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
-      <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white px-6 py-4 flex items-center justify-between gap-3">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl border-2 border-violet-300 overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-violet-800 via-indigo-700 to-cyan-600 text-white px-6 py-4 flex items-center justify-between gap-3 shadow-md">
         <div>
-          <h3 class="font-extrabold text-lg">Fiches pédagogiques</h3>
-          <p class="text-xs text-blue-100">Catégorie « Fiche pédagogique » • Niveaux 1AM à 4AM • Séquences 01 à 07</p>
+          <h3 class="font-extrabold text-lg tracking-tight">Fiches pédagogiques</h3>
+          <p class="text-xs text-violet-100 font-medium">Catégorie « Fiche pédagogique » • Niveaux 1AM à 4AM • Séquences 01 à 07</p>
         </div>
         <div class="flex items-center gap-2">
-          <button id="btnAdminAjouterFichePedag" type="button" onclick="ouvrirDepotFichePedag()" class="hidden text-xs font-bold bg-amber-400 hover:bg-amber-300 text-blue-950 px-3 py-1.5 rounded-lg cursor-pointer">+ Déposer une fiche</button>
-          <button type="button" onclick="fermerModalFichesPedag()" title="Fermer" aria-label="Fermer" class="w-10 h-10 rounded-xl bg-white/15 hover:bg-red-600 text-white border border-white/30 flex items-center justify-center text-2xl font-black transition cursor-pointer">&times;</button>
+          <button id="btnAdminAjouterFichePedag" type="button" onclick="ouvrirDepotFichePedag()" class="hidden text-xs font-bold bg-cyan-200 hover:bg-cyan-100 text-indigo-950 px-3 py-1.5 rounded-lg cursor-pointer shadow">+ Déposer des fiches pédagogiques</button>
+          <button type="button" onclick="fermerModalFichesPedag()" title="Fermer" aria-label="Fermer" class="w-10 h-10 rounded-xl bg-white/20 hover:bg-violet-950 text-white border border-white/35 flex items-center justify-center text-2xl font-black transition cursor-pointer">&times;</button>
         </div>
       </div>
 
-      <div class="p-6 overflow-y-auto flex-1 bg-slate-50 space-y-5">
+      <div class="p-6 overflow-y-auto flex-1 bg-gradient-to-b from-violet-50/50 via-slate-50 to-white space-y-5">
         <div>
-          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">1. Catégorie</span>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-violet-800 mb-2">1. Catégorie</span>
           <div class="flex flex-wrap gap-2">
-            <button type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-900 text-white shadow-sm">
+            <button type="button" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-violet-700 to-indigo-700 text-white shadow-sm">
               Fiche pédagogique
             </button>
           </div>
@@ -1026,8 +1033,8 @@
       document.querySelectorAll('.fp-year-btn').forEach((btn) => {
         const actif = btn.dataset.fpYear === annee;
         btn.className = actif
-          ? 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white border border-blue-900 shadow-sm cursor-pointer'
-          : 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer';
+          ? 'fp-year-btn px-4 py-2 rounded-xl text-sm font-extrabold bg-gradient-to-r from-violet-700 to-indigo-700 text-white border border-violet-700 shadow-sm cursor-pointer'
+          : 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-violet-200 hover:bg-violet-50 cursor-pointer';
       });
 
       const grid = document.getElementById('fpSequencesGrid');
@@ -1442,7 +1449,7 @@
         const el = document.getElementById(id);
         if (el) el.classList.toggle('hidden', !estAdmin);
       });
-      document.getElementById('adminAuthLabel').textContent = estAdmin ? 'Admin connecté' : 'Espace Admin';
+      document.getElementById('adminAuthLabel').textContent = estAdmin ? 'Admin connecté' : 'Admin';
       afficherDocuments();
       if (!document.getElementById('modalRepartitions').classList.contains('hidden')) changerOngletRepartition(niveauRepartitionActif);
       if (!document.getElementById('modalPlans').classList.contains('hidden')) changerOngletPlan(niveauPlanActif);
