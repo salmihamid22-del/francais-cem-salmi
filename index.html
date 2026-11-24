@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Le Français au CEM — Prof. SALMI Ahmed</title>
-  <link rel="icon" type="image/jpeg" href="/logo.JPG" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    html { font-size: 18.5px; }
     body { font-family: 'Inter', sans-serif; }
     @keyframes defilementBandeau {
       0%   { transform: translateX(0); }
@@ -24,6 +25,12 @@
     #bandeauImportant:hover .ticker-track {
       animation-play-state: paused;
     }
+    .cat-btn, .sub-btn {
+      transition: all 0.2s ease;
+    }
+    .cat-btn:hover {
+      transform: translateX(4px);
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -35,7 +42,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-[#131f2e] flex items-center justify-center shrink-0">
-          <img src="/logo.JPG" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <img src="/logo.jpg" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
           <svg style="display:none;" viewBox="0 0 120 120" class="w-full h-full">
             <circle cx="60" cy="60" r="56" fill="#131f2e" stroke="#d4af37" stroke-width="3"/>
             <text x="60" y="66" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="38" fill="#d4af37">SA</text>
@@ -91,23 +98,23 @@
   <!-- Statistiques et Filtres Niveaux -->
   <section class="bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="min-w-0 flex-1">
           <h2 class="text-lg font-bold text-slate-900">Bibliothèque numérique de langue française (Cycle Moyen)</h2>
           <p class="text-sm text-slate-600 mt-0.5">Devoirs (T1-T3), compositions (T1-T3), fiches pédagogiques (Séquences 01 à 07), modèles de production, répartitions, plans, applications et sujets du BEM.</p>
         </div>
-        <div class="flex flex-wrap items-center gap-3 text-sm">
-          <div class="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl border border-blue-100 text-center">
-            <span id="statTotalDocs" class="block text-lg font-extrabold">0</span>
-            <span class="text-xs text-blue-700 font-medium">Documents en ligne</span>
+        <div class="flex flex-nowrap items-stretch gap-2.5 sm:gap-3 text-sm shrink-0 overflow-x-auto">
+          <div class="bg-blue-50 text-blue-900 px-3.5 py-2 rounded-xl border border-blue-100 text-center shrink-0">
+            <span id="statTotalDocs" class="block text-xl font-extrabold">0</span>
+            <span class="text-xs text-blue-700 font-medium whitespace-nowrap">Documents en ligne</span>
           </div>
-          <div class="bg-emerald-50 text-emerald-900 px-4 py-2 rounded-xl border border-emerald-100 text-center">
-            <span id="statTotalDownloads" class="block text-lg font-extrabold">0</span>
-            <span class="text-xs text-emerald-700 font-medium">Téléchargements</span>
+          <div class="bg-emerald-50 text-emerald-900 px-3.5 py-2 rounded-xl border border-emerald-100 text-center shrink-0">
+            <span id="statTotalDownloads" class="block text-xl font-extrabold">0</span>
+            <span class="text-xs text-emerald-700 font-medium whitespace-nowrap">Téléchargements</span>
           </div>
-          <div class="bg-indigo-50 text-indigo-900 px-4 py-2 rounded-xl border border-indigo-100 text-center">
-            <span id="statTotalVisitors" class="block text-lg font-extrabold">1</span>
-            <span class="text-xs text-indigo-700 font-medium">Visiteurs</span>
+          <div class="bg-indigo-50 text-indigo-900 px-3.5 py-2 rounded-xl border border-indigo-100 text-center shrink-0">
+            <span id="statTotalVisitors" class="block text-xl font-extrabold">1</span>
+            <span class="text-xs text-indigo-700 font-medium whitespace-nowrap">Visiteurs</span>
           </div>
         </div>
       </div>
@@ -148,78 +155,78 @@
   <!-- Contenu principal : Panneau bleu nuit à gauche + Grille / Tableau BEM à droite -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
     <div class="flex flex-col lg:flex-row items-start gap-6">
-      <aside class="w-full lg:w-72 shrink-0 bg-[#0b1736] text-white rounded-2xl shadow-xl border border-blue-900/60 overflow-hidden lg:sticky lg:top-36">
-        <div class="bg-[#071026] px-5 py-4 border-b border-blue-900/60">
-          <h3 class="font-extrabold text-sm tracking-wide uppercase text-white">Catégories & Sous-catégories</h3>
-          <p class="text-[11px] text-blue-300">Cliquez sur la flèche pour déplier</p>
+      <aside class="w-full lg:w-80 shrink-0 bg-[#0b1736] text-white rounded-2xl shadow-xl border border-blue-800/60 overflow-hidden">
+        <div class="bg-[#071026] px-5 py-4 border-b border-blue-900/70">
+          <h3 class="font-extrabold text-base tracking-wide uppercase text-white">Catégories & Sous-catégories</h3>
+          <p class="text-xs text-blue-300 mt-0.5">Sélectionnez une catégorie pour afficher les documents</p>
         </div>
-        <nav class="p-3 space-y-1.5" id="sidebarCategories">
-          <button data-cat="TOUS" data-sub="TOUS" onclick="filtrerCategorie('TOUS', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow transition cursor-pointer">
-            <span>Toutes les catégories</span><span id="count-cat-TOUS" class="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white">0</span>
+        <nav class="p-3.5 space-y-2" id="sidebarCategories">
+          <button data-cat="TOUS" data-sub="TOUS" onclick="filtrerCategorie('TOUS', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-semibold text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
+            <span>Toutes les catégories</span><span id="count-cat-TOUS" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
           </button>
 
           <!-- Devoir -->
           <div>
-            <button data-cat="Devoir" data-sub="TOUS" onclick="filtrerCategorie('Devoir', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+            <button data-cat="Devoir" data-sub="TOUS" onclick="filtrerCategorie('Devoir', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
               <span class="flex items-center gap-2">
                 <span>Devoir surveillé</span>
                 <svg id="arrow-Devoir" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </span>
-              <span id="count-cat-Devoir" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+              <span id="count-cat-Devoir" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
             </button>
-            <div id="sub-Devoir" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
-              <button data-cat="Devoir" data-sub="Trimestre 1" onclick="filtrerCategorie('Devoir', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Devoir-Trimestre 1" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Devoir" data-sub="Trimestre 2" onclick="filtrerCategorie('Devoir', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Devoir-Trimestre 2" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Devoir" data-sub="Trimestre 3" onclick="filtrerCategorie('Devoir', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Devoir-Trimestre 3" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            <div id="sub-Devoir" class="hidden pl-4 pr-1 py-1.5 space-y-1.5 border-l-2 border-amber-400/70 ml-4 mt-1">
+              <button data-cat="Devoir" data-sub="Trimestre 1" onclick="filtrerCategorie('Devoir', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Devoir-Trimestre 1" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Devoir" data-sub="Trimestre 2" onclick="filtrerCategorie('Devoir', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Devoir-Trimestre 2" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Devoir" data-sub="Trimestre 3" onclick="filtrerCategorie('Devoir', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Devoir-Trimestre 3" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
             </div>
           </div>
 
           <!-- Composition -->
           <div>
-            <button data-cat="Composition" data-sub="TOUS" onclick="filtrerCategorie('Composition', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+            <button data-cat="Composition" data-sub="TOUS" onclick="filtrerCategorie('Composition', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
               <span class="flex items-center gap-2">
                 <span>Composition trimestrielle</span>
                 <svg id="arrow-Composition" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </span>
-              <span id="count-cat-Composition" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+              <span id="count-cat-Composition" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
             </button>
-            <div id="sub-Composition" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
-              <button data-cat="Composition" data-sub="Trimestre 1" onclick="filtrerCategorie('Composition', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Composition-Trimestre 1" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Composition" data-sub="Trimestre 2" onclick="filtrerCategorie('Composition', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Composition-Trimestre 2" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Composition" data-sub="Trimestre 3" onclick="filtrerCategorie('Composition', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Composition-Trimestre 3" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            <div id="sub-Composition" class="hidden pl-4 pr-1 py-1.5 space-y-1.5 border-l-2 border-amber-400/70 ml-4 mt-1">
+              <button data-cat="Composition" data-sub="Trimestre 1" onclick="filtrerCategorie('Composition', 'Trimestre 1')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 1</span><span id="count-sub-Composition-Trimestre 1" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Composition" data-sub="Trimestre 2" onclick="filtrerCategorie('Composition', 'Trimestre 2')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 2</span><span id="count-sub-Composition-Trimestre 2" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Composition" data-sub="Trimestre 3" onclick="filtrerCategorie('Composition', 'Trimestre 3')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Trimestre 3</span><span id="count-sub-Composition-Trimestre 3" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
             </div>
           </div>
 
           <!-- Fiche pédagogique -->
           <div>
-            <button data-cat="Fiche pédagogique" data-sub="TOUS" onclick="filtrerCategorie('Fiche pédagogique', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 transition cursor-pointer">
+            <button data-cat="Fiche pédagogique" data-sub="TOUS" onclick="filtrerCategorie('Fiche pédagogique', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
               <span class="flex items-center gap-2">
                 <span>Fiche pédagogique</span>
                 <svg id="arrow-Fiche pédagogique" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </span>
-              <span id="count-cat-Fiche pédagogique" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span>
+              <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
             </button>
-            <div id="sub-Fiche pédagogique" class="hidden pl-4 pr-1 py-1 space-y-1 border-l-2 border-amber-400/70 ml-3.5 mt-1">
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 01" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 01')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 01</span><span id="count-sub-Fiche pédagogique-Séquence 01" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 02" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 02')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 02</span><span id="count-sub-Fiche pédagogique-Séquence 02" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 03" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 03')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 03</span><span id="count-sub-Fiche pédagogique-Séquence 03" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 04" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 04')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 04</span><span id="count-sub-Fiche pédagogique-Séquence 04" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 05" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 05')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 05</span><span id="count-sub-Fiche pédagogique-Séquence 05" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 06" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 06')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 06</span><span id="count-sub-Fiche pédagogique-Séquence 06" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 07" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 07')" class="sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 07</span><span id="count-sub-Fiche pédagogique-Séquence 07" class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
+            <div id="sub-Fiche pédagogique" class="hidden pl-4 pr-1 py-1.5 space-y-1.5 border-l-2 border-amber-400/70 ml-4 mt-1">
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 01" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 01')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 01</span><span id="count-sub-Fiche pédagogique-Séquence 01" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 02" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 02')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 02</span><span id="count-sub-Fiche pédagogique-Séquence 02" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 03" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 03')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 03</span><span id="count-sub-Fiche pédagogique-Séquence 03" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 04" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 04')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 04</span><span id="count-sub-Fiche pédagogique-Séquence 04" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 05" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 05')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 05</span><span id="count-sub-Fiche pédagogique-Séquence 05" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 06" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 06')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 06</span><span id="count-sub-Fiche pédagogique-Séquence 06" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
+              <button data-cat="Fiche pédagogique" data-sub="Séquence 07" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 07')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 07</span><span id="count-sub-Fiche pédagogique-Séquence 07" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
             </div>
           </div>
 
           <!-- Modèles de production -->
-          <button type="button" onclick="ouvrirModalModelesProd()" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-amber-200 hover:bg-blue-900/60 transition cursor-pointer text-left">
+          <button type="button" onclick="ouvrirModalModelesProd()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-semibold text-amber-200 hover:bg-blue-900/60 border border-transparent hover:border-amber-400/40 cursor-pointer text-left">
             <span>Modèles de production</span>
-            <span id="count-cat-Modèle de production" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-amber-300">0</span>
+            <span id="count-cat-Modèle de production" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/60 shadow-sm">0</span>
           </button>
 
-          <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-          <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-blue-100 hover:bg-blue-900/60 cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-blue-300">0</span></button>
-          <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-sky-200 hover:bg-blue-900/60 cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-sky-300">0</span></button>
-          <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-amber-200 hover:bg-blue-900/60 cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-[11px] px-2 py-0.5 rounded-full bg-blue-950 text-amber-300">0</span></button>
+          <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span></button>
+          <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span></button>
+          <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-sky-200 hover:bg-blue-900/60 border border-transparent hover:border-sky-400/40 cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-sky-400/20 text-sky-200 border border-sky-400/60 shadow-sm">0</span></button>
+          <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-amber-200 hover:bg-blue-900/60 border border-transparent hover:border-amber-400/40 cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/60 shadow-sm">0</span></button>
         </nav>
       </aside>
 
@@ -232,6 +239,17 @@
         <div id="loadingState" class="text-center py-16">
           <div class="inline-block w-10 h-10 border-4 border-blue-800 border-t-transparent rounded-full animate-spin"></div>
           <p class="mt-3 text-sm font-medium text-slate-600">Chargement des documents...</p>
+        </div>
+
+        <!-- Message d'accueil avant sélection d'une catégorie -->
+        <div id="welcomePromptState" class="hidden text-center py-16 bg-white rounded-2xl border-2 border-dashed border-blue-200 p-8 shadow-sm">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-blue-50 text-blue-900 flex items-center justify-center border border-blue-100">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-extrabold text-blue-950">Bienvenue dans l'espace pédagogique</h3>
+          <p class="mt-2 text-base text-slate-600 max-w-md mx-auto">Veuillez cliquer sur une catégorie dans le menu de gauche pour afficher les documents correspondants.</p>
         </div>
         <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
           <h3 id="emptyTitle" class="text-base font-bold text-slate-900">Aucun document disponible dans cette rubrique</h3>
@@ -265,7 +283,7 @@
           </div>
         </div>
 
-        <div id="documentsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+        <div id="documentsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
       </div>
     </div>
   </main>
@@ -601,6 +619,7 @@
     let niveauActif = 'TOUS';
     let categorieActive = 'TOUS';
     let sousCategorieActive = 'TOUS';
+    let categorieSelectionnee = false;
     let niveauRepartitionActif = '1AM';
     let niveauPlanActif = '1AM';
     let mpAnneeActive = null;
@@ -759,7 +778,7 @@
         btn.type = 'button';
         btn.dataset.mpSeq = seq;
         btn.className = 'mp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
-        btn.innerHTML = `<span>Séquence ${seq}</span><span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">${nbDocs}</span>`;
+        btn.innerHTML = `<span>Séquence ${seq}</span><span class="text-xs font-extrabold px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200">${nbDocs}</span>`;
         btn.onclick = () => selectionnerSequenceMP(seq);
         grid.appendChild(btn);
       });
@@ -856,6 +875,7 @@
     }
 
     function ouvrirTableauBEM() {
+      categorieSelectionnee = true;
       categorieActive = 'Sujet BEM';
       sousCategorieActive = 'TOUS';
       document.getElementById('filterTrimestre').value = 'TOUS';
@@ -1283,12 +1303,25 @@
       afficherDocuments();
     }
 
-    function synchroniserFiltreSousCat() { sousCategorieActive = document.getElementById('filterTrimestre').value; mettreAJourStylesMenuGauche(); afficherDocuments(); }
-    function filtrerCategorie(cat, subCat = 'TOUS') { categorieActive = cat; sousCategorieActive = subCat; document.getElementById('filterTrimestre').value = subCat; mettreAJourStylesMenuGauche(); afficherDocuments(); }
+    function synchroniserFiltreSousCat() {
+      sousCategorieActive = document.getElementById('filterTrimestre').value;
+      if (sousCategorieActive !== 'TOUS') categorieSelectionnee = true;
+      mettreAJourStylesMenuGauche();
+      afficherDocuments();
+    }
+
+    function filtrerCategorie(cat, subCat = 'TOUS') {
+      categorieSelectionnee = true;
+      categorieActive = cat;
+      sousCategorieActive = subCat;
+      document.getElementById('filterTrimestre').value = subCat;
+      mettreAJourStylesMenuGauche();
+      afficherDocuments();
+    }
 
     function mettreAJourStylesMenuGauche() {
       ['Devoir', 'Composition', 'Fiche pédagogique'].forEach(parentCat => {
-        const isOpen = categorieActive === parentCat;
+        const isOpen = categorieSelectionnee && categorieActive === parentCat;
         const subBox = document.getElementById(`sub-${parentCat}`);
         const arrow = document.getElementById(`arrow-${parentCat}`);
         if (subBox) subBox.classList.toggle('hidden', !isOpen);
@@ -1297,29 +1330,29 @@
 
       document.querySelectorAll('.cat-btn').forEach(btn => {
         const badge = btn.querySelector('span:last-child');
-        if (btn.dataset.cat === categorieActive) {
-          btn.className = 'cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow cursor-pointer';
-          if (badge) badge.className = 'text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white';
+        if (categorieSelectionnee && btn.dataset.cat === categorieActive) {
+          btn.className = 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold bg-blue-600 text-white shadow-md border border-blue-400/50 cursor-pointer';
+          if (badge) badge.className = 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-white text-blue-900 shadow-sm';
         } else {
           const isBem = btn.dataset.cat === 'Sujet BEM', isApp = btn.dataset.cat === 'Applications';
-          btn.className = `cat-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium ${isBem ? 'text-amber-200' : (isApp ? 'text-sky-200' : 'text-blue-100')} hover:bg-blue-900/60 cursor-pointer`;
-          if (badge) badge.className = `text-[11px] px-2 py-0.5 rounded-full bg-blue-950 ${isBem ? 'text-amber-300' : (isApp ? 'text-sky-300' : 'text-blue-300')}`;
+          btn.className = `cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium ${isBem ? 'text-amber-200' : (isApp ? 'text-sky-200' : 'text-blue-100')} hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer`;
+          if (badge) badge.className = `text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full shadow-sm ${isBem ? 'bg-amber-400/20 text-amber-300 border border-amber-400/60' : (isApp ? 'bg-sky-400/20 text-sky-200 border border-sky-400/60' : 'bg-blue-900/90 text-white border border-blue-400/50')}`;
         }
       });
 
       document.querySelectorAll('.sub-btn').forEach(btn => {
         const badge = btn.querySelector('span:last-child');
-        if (btn.dataset.cat === categorieActive && btn.dataset.sub === sousCategorieActive) {
-          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm cursor-pointer';
-          if (badge) badge.className = 'text-[10px] px-1.5 py-0.5 rounded-full bg-white/20 text-white';
+        if (categorieSelectionnee && btn.dataset.cat === categorieActive && btn.dataset.sub === sousCategorieActive) {
+          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-sm cursor-pointer';
+          if (badge) badge.className = 'text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-white text-emerald-800 shadow-sm';
         } else {
-          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs text-blue-200 hover:bg-blue-900/60 cursor-pointer';
-          if (badge) badge.className = 'text-[10px] px-1.5 py-0.5 rounded-full bg-blue-950 text-blue-300';
+          btn.className = 'sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer';
+          if (badge) badge.className = 'text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40';
         }
       });
 
       const breadcrumb = document.getElementById('activeFilterBreadcrumb');
-      if (categorieActive !== 'TOUS' || sousCategorieActive !== 'TOUS') {
+      if (categorieSelectionnee && (categorieActive !== 'TOUS' || sousCategorieActive !== 'TOUS')) {
         const parts = [];
         if (niveauActif !== 'TOUS' && categorieActive !== 'Sujet BEM') parts.push(`Niveau : ${niveauActif}`);
         if (categorieActive !== 'TOUS') parts.push(`Catégorie : ${categorieActive}`);
@@ -1337,7 +1370,18 @@
       const trimestre = document.getElementById('filterTrimestre').value;
       const grid = document.getElementById('documentsGrid');
       const empty = document.getElementById('emptyState');
+      const welcome = document.getElementById('welcomePromptState');
       const bemSection = document.getElementById('bemTableSection');
+
+      if (!categorieSelectionnee && !recherche && trimestre === 'TOUS') {
+        grid.classList.add('hidden');
+        empty.classList.add('hidden');
+        bemSection.classList.add('hidden');
+        if (welcome) welcome.classList.remove('hidden');
+        return;
+      }
+
+      if (welcome) welcome.classList.add('hidden');
 
       if (categorieActive === 'Sujet BEM') {
         grid.classList.add('hidden'); empty.classList.add('hidden'); bemSection.classList.remove('hidden');
