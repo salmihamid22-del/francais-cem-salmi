@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Le Français au CEM — Prof. SALMI Ahmed</title>
-  <link rel="icon" type="image/jpeg" href="/logo.JPG" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-[#131f2e] flex items-center justify-center shrink-0">
-          <img src="/logo.JPG" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <img src="/logo.jpg" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
           <svg style="display:none;" viewBox="0 0 120 120" class="w-full h-full">
             <circle cx="60" cy="60" r="56" fill="#131f2e" stroke="#d4af37" stroke-width="3"/>
             <text x="60" y="66" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="38" fill="#d4af37">SA</text>
@@ -198,24 +198,10 @@
           </div>
 
           <!-- Fiche pédagogique -->
-          <div>
-            <button data-cat="Fiche pédagogique" data-sub="TOUS" onclick="filtrerCategorie('Fiche pédagogique', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
-              <span class="flex items-center gap-2">
-                <span>Fiche pédagogique</span>
-                <svg id="arrow-Fiche pédagogique" class="w-5 h-5 text-amber-300 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-              </span>
-              <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
-            </button>
-            <div id="sub-Fiche pédagogique" class="hidden pl-4 pr-1 py-1.5 space-y-1.5 border-l-2 border-amber-400/70 ml-4 mt-1">
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 01" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 01')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 01</span><span id="count-sub-Fiche pédagogique-Séquence 01" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 02" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 02')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 02</span><span id="count-sub-Fiche pédagogique-Séquence 02" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 03" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 03')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 03</span><span id="count-sub-Fiche pédagogique-Séquence 03" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 04" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 04')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 04</span><span id="count-sub-Fiche pédagogique-Séquence 04" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 05" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 05')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 05</span><span id="count-sub-Fiche pédagogique-Séquence 05" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 06" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 06')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 06</span><span id="count-sub-Fiche pédagogique-Séquence 06" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-              <button data-cat="Fiche pédagogique" data-sub="Séquence 07" onclick="filtrerCategorie('Fiche pédagogique', 'Séquence 07')" class="sub-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-blue-900/60 cursor-pointer"><span>↳ Séquence 07</span><span id="count-sub-Fiche pédagogique-Séquence 07" class="text-sm font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/40">0</span></button>
-            </div>
-          </div>
+          <button type="button" onclick="ouvrirModalFichesPedag()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer text-left">
+            <span>Fiche pédagogique</span>
+            <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
+          </button>
 
           <!-- Modèles de production -->
           <button type="button" onclick="ouvrirModalModelesProd()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-semibold text-amber-200 hover:bg-blue-900/60 border border-transparent hover:border-amber-400/40 cursor-pointer text-left">
@@ -288,6 +274,75 @@
     </div>
   </main>
 
+  <!-- Page dédiée au contenu d'un onglet / catégorie (avec bouton X en haut pour revenir) -->
+  <div id="pageContenuVue" class="hidden fixed inset-0 z-50 bg-slate-50 flex flex-col overflow-hidden">
+    <!-- Barre supérieure fixe avec titre et bouton X -->
+    <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white shadow-lg shrink-0">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="pageVueBadgeNiveau" class="text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-amber-400 text-blue-950">Tous les niveaux</span>
+            <span id="pageVueCount" class="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-white/15 text-white border border-white/25">0 document(s)</span>
+          </div>
+          <h2 id="pageVueTitre" class="text-lg sm:text-xl font-extrabold tracking-tight truncate mt-1">Documents</h2>
+        </div>
+        <button type="button" onclick="fermerPageContenu()" title="Retour à l'accueil" aria-label="Fermer et revenir" class="w-11 h-11 rounded-xl bg-white/15 hover:bg-red-600 text-white border border-white/30 flex items-center justify-center text-2xl font-black shadow transition cursor-pointer shrink-0">
+          &times;
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de recherche et filtre rapide dans la page -->
+    <div class="bg-white border-b border-slate-200 shrink-0">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <input type="text" id="pageSearchInput" oninput="synchroniserRecherchePage()" placeholder="Rechercher dans cette rubrique..." class="flex-1 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none" />
+        <div class="flex flex-wrap items-center gap-1.5" id="pageNiveauPills">
+          <button type="button" data-pniv="TOUS" onclick="changerNiveauDepuisPage('TOUS')" class="pniv-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-900 text-white cursor-pointer">Tous</button>
+          <button type="button" data-pniv="1AM" onclick="changerNiveauDepuisPage('1AM')" class="pniv-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">1AM</button>
+          <button type="button" data-pniv="2AM" onclick="changerNiveauDepuisPage('2AM')" class="pniv-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">2AM</button>
+          <button type="button" data-pniv="3AM" onclick="changerNiveauDepuisPage('3AM')" class="pniv-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">3AM</button>
+          <button type="button" data-pniv="4AM" onclick="changerNiveauDepuisPage('4AM')" class="pniv-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">4AM</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone défilante du contenu -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div id="pageEmptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+          <h3 class="text-base font-bold text-slate-900">Aucun document disponible dans cette rubrique</h3>
+          <p class="mt-1 text-sm text-slate-500">Essayez un autre niveau ou modifiez votre recherche.</p>
+        </div>
+
+        <!-- Tableau Spécial BEM dans la page -->
+        <div id="pageBemTableSection" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 text-blue-950 px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-extrabold text-lg">Annales & Sujets du BEM — Français (4AM)</h3>
+              <p class="text-xs font-semibold text-amber-950/80">Tableau récapitulatif : Année • Sujet d'examen • Corrigé type</p>
+            </div>
+            <button id="btnAdminAjouterBEMPage" onclick="ouvrirDepotBEM()" class="hidden bg-blue-950 hover:bg-blue-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow cursor-pointer">+ Ajouter un Sujet / Corrigé BEM</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-white text-xs uppercase tracking-wider">
+                  <th class="py-3.5 px-5 font-extrabold w-1/4">Année / Session</th>
+                  <th class="py-3.5 px-5 font-extrabold w-[37.5%]">Sujet</th>
+                  <th class="py-3.5 px-5 font-extrabold w-[37.5%]">Corrigé</th>
+                </tr>
+              </thead>
+              <tbody id="pageBemTableBody" class="divide-y divide-slate-200 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Grille des documents dans la page -->
+        <div id="pageDocumentsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </div>
+    </div>
+  </div>
+
   <footer class="bg-slate-900 text-slate-400 py-6 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
       <p>© 2026 <strong class="text-white">Le Français au CEM</strong> — Prof. SALMI Ahmed. Tous droits réservés.</p>
@@ -308,6 +363,56 @@
       <div id="listeAnnoncesBandeauAdmin" class="p-6 overflow-y-auto flex-1 space-y-3 bg-slate-50"></div>
       <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
         <button onclick="fermerModalGestionBandeau()" class="bg-slate-900 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Fiches pédagogiques (Niveaux 1AM-4AM -> Séquences 01 à 07) -->
+  <div id="modalFichesPedag" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white px-6 py-4 flex items-center justify-between gap-3">
+        <div>
+          <h3 class="font-extrabold text-lg">Fiches pédagogiques</h3>
+          <p class="text-xs text-blue-100">Catégorie « Fiche pédagogique » • Niveaux 1AM à 4AM • Séquences 01 à 07</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnAdminAjouterFichePedag" type="button" onclick="ouvrirDepotFichePedag()" class="hidden text-xs font-bold bg-amber-400 hover:bg-amber-300 text-blue-950 px-3 py-1.5 rounded-lg cursor-pointer">+ Déposer une fiche</button>
+          <button type="button" onclick="fermerModalFichesPedag()" title="Fermer" aria-label="Fermer" class="w-10 h-10 rounded-xl bg-white/15 hover:bg-red-600 text-white border border-white/30 flex items-center justify-center text-2xl font-black transition cursor-pointer">&times;</button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 bg-slate-50 space-y-5">
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">1. Catégorie</span>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-900 text-white shadow-sm">
+              Fiche pédagogique
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">2. Choisissez le niveau</span>
+          <div id="fpAnneeBtns" class="flex flex-wrap gap-2">
+            <button type="button" data-fp-year="1AM" onclick="selectionnerAnneeFP('1AM')" class="fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">1AM</button>
+            <button type="button" data-fp-year="2AM" onclick="selectionnerAnneeFP('2AM')" class="fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">2AM</button>
+            <button type="button" data-fp-year="3AM" onclick="selectionnerAnneeFP('3AM')" class="fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">3AM</button>
+            <button type="button" data-fp-year="4AM" onclick="selectionnerAnneeFP('4AM')" class="fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer">4AM</button>
+          </div>
+        </div>
+
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">3. Choisissez la séquence</span>
+          <div id="fpSequencesGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+            <p class="col-span-full text-xs text-slate-500 italic">Sélectionnez d'abord un niveau (1AM, 2AM, 3AM ou 4AM).</p>
+          </div>
+        </div>
+
+        <div id="fpResultatsContenu"></div>
+      </div>
+
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
+        <button type="button" onclick="fermerModalFichesPedag()" class="bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button>
       </div>
     </div>
   </div>
@@ -624,6 +729,8 @@
     let niveauPlanActif = '1AM';
     let mpAnneeActive = null;
     let mpSequenceActive = null;
+    let fpAnneeActive = null;
+    let fpSequenceActive = null;
     let sourceDocumentActive = 'local';
     let estAdmin = false;
     let authInitialisee = false;
@@ -818,6 +925,87 @@
       if (mpAnneeActive) document.getElementById('docNiveau').value = mpAnneeActive;
     }
 
+    function ouvrirModalFichesPedag() {
+      fpAnneeActive = null;
+      fpSequenceActive = null;
+      document.querySelectorAll('.fp-year-btn').forEach((btn) => {
+        btn.className = 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer';
+      });
+      document.getElementById('fpSequencesGrid').innerHTML =
+        '<p class="col-span-full text-xs text-slate-500 italic">Sélectionnez d\'abord un niveau (1AM, 2AM, 3AM ou 4AM).</p>';
+      document.getElementById('fpResultatsContenu').innerHTML = '';
+      document.getElementById('modalFichesPedag').classList.remove('hidden');
+    }
+
+    function fermerModalFichesPedag() {
+      document.getElementById('modalFichesPedag').classList.add('hidden');
+    }
+
+    function selectionnerAnneeFP(annee) {
+      fpAnneeActive = annee;
+      fpSequenceActive = null;
+      document.getElementById('fpResultatsContenu').innerHTML = '';
+
+      document.querySelectorAll('.fp-year-btn').forEach((btn) => {
+        const actif = btn.dataset.fpYear === annee;
+        btn.className = actif
+          ? 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white border border-blue-900 shadow-sm cursor-pointer'
+          : 'fp-year-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 cursor-pointer';
+      });
+
+      const grid = document.getElementById('fpSequencesGrid');
+      grid.innerHTML = '';
+
+      MP_SEQUENCES.forEach((seq) => {
+        const nomSeq = `Séquence ${seq}`;
+        const nbDocs = tousLesDocuments.filter(
+          (d) => d.categorie === 'Fiche pédagogique' && correspondAuNiveau(d, annee) && d.trimestre === nomSeq
+        ).length;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.fpSeq = seq;
+        btn.className = 'fp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
+        btn.innerHTML = `<span>Séquence ${seq}</span><span class="text-xs font-extrabold px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200">${nbDocs}</span>`;
+        btn.onclick = () => selectionnerSequenceFP(seq);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectionnerSequenceFP(seq) {
+      fpSequenceActive = seq;
+      const nomSeq = `Séquence ${seq}`;
+
+      document.querySelectorAll('.fp-seq-btn').forEach((btn) => {
+        const actif = btn.dataset.fpSeq === seq;
+        btn.className = actif
+          ? 'fp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-emerald-700 text-white border border-emerald-700 shadow-sm cursor-pointer flex items-center justify-between gap-1'
+          : 'fp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
+      });
+
+      const docsFiltres = tousLesDocuments.filter(
+        (d) => d.categorie === 'Fiche pédagogique' && correspondAuNiveau(d, fpAnneeActive) && d.trimestre === nomSeq
+      );
+
+      const conteneur = document.getElementById('fpResultatsContenu');
+      if (docsFiltres.length === 0) {
+        conteneur.innerHTML = `
+          <div class="text-center py-10 bg-white rounded-2xl border border-dashed border-slate-300 p-6">
+            <p class="font-bold text-slate-800">Aucune fiche pédagogique déposée pour ${fpAnneeActive} — ${nomSeq}</p>
+            ${estAdmin ? `<button type="button" onclick="ouvrirDepotFichePedag()" class="mt-3 bg-amber-400 hover:bg-amber-300 text-blue-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">+ Déposer une fiche pour ${fpAnneeActive} (${nomSeq})</button>` : ''}
+          </div>`;
+      } else {
+        conteneur.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map((doc) => genererCarteDocumentHTML(doc)).join('')}</div>`;
+      }
+    }
+
+    function ouvrirDepotFichePedag() {
+      ouvrirModalDepot();
+      document.getElementById('docCategorie').value = 'Fiche pédagogique';
+      adapterOptionsSousCategorieFormulaire(fpSequenceActive ? `Séquence ${fpSequenceActive}` : 'Séquence 01');
+      if (fpAnneeActive) document.getElementById('docNiveau').value = fpAnneeActive;
+    }
+
     function extraireIdDrive(url) {
       if (!url) return null;
       const m = url.match(/\/file\/d\/([^/?#]+)/) || url.match(/\/d\/([^/?#]+)/) || url.match(/[?&]id=([^&#]+)/);
@@ -880,7 +1068,7 @@
       sousCategorieActive = 'TOUS';
       document.getElementById('filterTrimestre').value = 'TOUS';
       mettreAJourStylesMenuGauche();
-      afficherDocuments();
+      ouvrirPageContenu();
     }
 
     function genererCelluleActionBEM(doc, labelDefaut) {
@@ -890,8 +1078,9 @@
       return `<div><p class="text-xs font-bold text-slate-800 mb-1.5">${doc.titre}</p><div class="flex flex-wrap items-center gap-2"><button type="button" onclick="ouvrirApercuDocument('${doc.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg cursor-pointer">Aperçu</button><button type="button" onclick="telechargerDirectement(event, '${doc.id}')" class="${labelDefaut === 'Corrigé' ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-blue-900 hover:bg-blue-800'} text-white text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer">Télécharger (${estPdf ? 'PDF' : 'DOCX'})</button><span class="text-[11px] text-slate-500"><strong class="dl-count-${doc.id}">${doc.telechargements || 0}</strong> dl</span></div>${adminBtns}</div>`;
     }
 
-    function afficherTableauBEM(docsBem) {
-      const tbody = document.getElementById('bemTableBody');
+    function afficherTableauBEM(docsBem, targetId = 'bemTableBody') {
+      const tbody = document.getElementById(targetId);
+      if (!tbody) return;
       if (docsBem.length === 0) {
         tbody.innerHTML = `<tr><td colspan="3" class="py-10 px-6 text-center text-slate-500"><p class="font-bold text-slate-800 text-base">Aucun sujet ou corrigé BEM publié pour le moment</p></td></tr>`;
         return;
@@ -1002,7 +1191,7 @@
     }
 
     function mettreAJourInterfaceAdmin() {
-      ['btnAdminUpload', 'adminBanner', 'btnAdminAjouterRepartition', 'btnAdminAjouterPlan', 'btnAdminAjouterBEM', 'btnAdminAjouterModeleProd'].forEach(id => {
+      ['btnAdminUpload', 'adminBanner', 'btnAdminAjouterRepartition', 'btnAdminAjouterPlan', 'btnAdminAjouterBEM', 'btnAdminAjouterBEMPage', 'btnAdminAjouterModeleProd', 'btnAdminAjouterFichePedag'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.toggle('hidden', !estAdmin);
       });
@@ -1014,6 +1203,11 @@
         const seqSauvegardee = mpSequenceActive;
         selectionnerAnneeMP(mpAnneeActive);
         if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
+      }
+      if (!document.getElementById('modalFichesPedag').classList.contains('hidden') && fpAnneeActive) {
+        const seqSauvegardeeFP = fpSequenceActive;
+        selectionnerAnneeFP(fpAnneeActive);
+        if (seqSauvegardeeFP) selectionnerSequenceFP(seqSauvegardeeFP);
       }
     }
 
@@ -1262,6 +1456,11 @@
           selectionnerAnneeMP(mpAnneeActive);
           if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
         }
+        if (!document.getElementById('modalFichesPedag').classList.contains('hidden') && fpAnneeActive) {
+          const seqSauvegardeeFP = fpSequenceActive;
+          selectionnerAnneeFP(fpAnneeActive);
+          if (seqSauvegardeeFP) selectionnerSequenceFP(seqSauvegardeeFP);
+        }
       } catch (err) {
         badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span> Hors ligne';
         document.getElementById('loadingState').classList.add('hidden');
@@ -1290,7 +1489,30 @@
       });
     }
 
-    function filtrerNiveau(niveau) {
+    function ouvrirPageContenu() {
+      const page = document.getElementById('pageContenuVue');
+      if (!page) return;
+      document.getElementById('pageSearchInput').value = document.getElementById('searchInput').value || '';
+      page.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      rendrePageContenu();
+    }
+
+    function fermerPageContenu() {
+      const page = document.getElementById('pageContenuVue');
+      if (page) page.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      categorieSelectionnee = false;
+      mettreAJourStylesMenuGauche();
+      afficherDocuments();
+    }
+
+    function synchroniserRecherchePage() {
+      document.getElementById('searchInput').value = document.getElementById('pageSearchInput').value;
+      rendrePageContenu();
+    }
+
+    function changerNiveauDepuisPage(niveau) {
       niveauActif = niveau;
       if (categorieActive === 'Sujet BEM') { categorieActive = 'TOUS'; sousCategorieActive = 'TOUS'; }
       document.querySelectorAll('.tab-niveau').forEach(btn => {
@@ -1300,14 +1522,102 @@
       });
       mettreAJourCompteursCategories();
       mettreAJourStylesMenuGauche();
-      afficherDocuments();
+      rendrePageContenu();
+    }
+
+    function rendrePageContenu() {
+      const page = document.getElementById('pageContenuVue');
+      if (!page || page.classList.contains('hidden')) return;
+
+      const recherche = (document.getElementById('pageSearchInput').value || '').toLowerCase().trim();
+      const trimestre = document.getElementById('filterTrimestre').value;
+      const grid = document.getElementById('pageDocumentsGrid');
+      const empty = document.getElementById('pageEmptyState');
+      const bemSection = document.getElementById('pageBemTableSection');
+      const pillsWrap = document.getElementById('pageNiveauPills');
+
+      // Mise à jour du titre et des badges de la page
+      const titreParts = [];
+      if (categorieActive === 'TOUS') titreParts.push('Toutes les catégories');
+      else titreParts.push(categorieActive);
+      if (sousCategorieActive !== 'TOUS') titreParts.push(sousCategorieActive);
+      document.getElementById('pageVueTitre').textContent = titreParts.join(' • ');
+      document.getElementById('pageVueBadgeNiveau').textContent = categorieActive === 'Sujet BEM' ? 'BEM (4AM)' : (niveauActif === 'TOUS' ? 'Tous les niveaux' : niveauActif);
+
+      // Mise à jour des boutons de niveau dans la page
+      if (pillsWrap) pillsWrap.classList.toggle('hidden', categorieActive === 'Sujet BEM');
+      document.querySelectorAll('.pniv-btn').forEach(btn => {
+        btn.className = btn.dataset.pniv === niveauActif
+          ? 'pniv-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-900 text-white cursor-pointer'
+          : 'pniv-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+      });
+
+      if (categorieActive === 'Sujet BEM') {
+        grid.classList.add('hidden');
+        empty.classList.add('hidden');
+        bemSection.classList.remove('hidden');
+        const docsBem = tousLesDocuments.filter(doc => doc.categorie === 'Sujet BEM' && (!recherche || (doc.titre && doc.titre.toLowerCase().includes(recherche)) || (doc.trimestre && doc.trimestre.toLowerCase().includes(recherche))));
+        document.getElementById('pageVueCount').textContent = `${docsBem.length} document(s)`;
+        afficherTableauBEM(docsBem, 'pageBemTableBody');
+        return;
+      }
+
+      bemSection.classList.add('hidden');
+      const filtres = tousLesDocuments.filter(doc => correspondAuNiveau(doc, niveauActif) && (trimestre === 'TOUS' || doc.trimestre === trimestre) && (categorieActive === 'TOUS' || doc.categorie === categorieActive) && (!recherche || (doc.titre && doc.titre.toLowerCase().includes(recherche)) || (doc.auteur && doc.auteur.toLowerCase().includes(recherche)) || (doc.nom_fichier && doc.nom_fichier.toLowerCase().includes(recherche)) || (doc.trimestre && doc.trimestre.toLowerCase().includes(recherche))));
+      document.getElementById('pageVueCount').textContent = `${filtres.length} document(s)`;
+
+      if (filtres.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.classList.remove('hidden');
+        grid.innerHTML = filtres.map(doc => genererCarteDocumentHTML(doc)).join('');
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const page = document.getElementById('pageContenuVue');
+        const apercu = document.getElementById('modalApercu');
+        const depot = document.getElementById('modalDepot');
+        const login = document.getElementById('modalLogin');
+        if (apercu && !apercu.classList.contains('hidden')) return fermerModalApercu();
+        if (depot && !depot.classList.contains('hidden')) return fermerModalDepot();
+        if (login && !login.classList.contains('hidden')) return fermerModalLogin();
+        const fp = document.getElementById('modalFichesPedag');
+        const mp = document.getElementById('modalModelesProd');
+        if (fp && !fp.classList.contains('hidden')) return fermerModalFichesPedag();
+        if (mp && !mp.classList.contains('hidden')) return fermerModalModelesProd();
+        if (page && !page.classList.contains('hidden')) fermerPageContenu();
+      }
+    });
+
+    function filtrerNiveau(niveau) {
+      niveauActif = niveau;
+      categorieSelectionnee = true;
+      if (categorieActive === 'Sujet BEM') { categorieActive = 'TOUS'; sousCategorieActive = 'TOUS'; }
+      document.querySelectorAll('.tab-niveau').forEach(btn => {
+        if (btn.dataset.niveau === niveau) btn.className = 'tab-niveau active px-4 py-2 rounded-xl text-sm font-bold bg-blue-900 text-white shadow-sm cursor-pointer';
+        else if (btn.dataset.niveau === 'BEM') btn.className = 'tab-niveau px-4 py-2 rounded-xl text-sm font-bold bg-amber-100 text-amber-900 hover:bg-amber-200 cursor-pointer';
+        else btn.className = 'tab-niveau px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+      });
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
     }
 
     function synchroniserFiltreSousCat() {
       sousCategorieActive = document.getElementById('filterTrimestre').value;
-      if (sousCategorieActive !== 'TOUS') categorieSelectionnee = true;
-      mettreAJourStylesMenuGauche();
-      afficherDocuments();
+      if (sousCategorieActive !== 'TOUS') {
+        categorieSelectionnee = true;
+        mettreAJourStylesMenuGauche();
+        ouvrirPageContenu();
+      } else {
+        mettreAJourStylesMenuGauche();
+        afficherDocuments();
+      }
     }
 
     function filtrerCategorie(cat, subCat = 'TOUS') {
@@ -1316,7 +1626,7 @@
       sousCategorieActive = subCat;
       document.getElementById('filterTrimestre').value = subCat;
       mettreAJourStylesMenuGauche();
-      afficherDocuments();
+      ouvrirPageContenu();
     }
 
     function mettreAJourStylesMenuGauche() {
@@ -1401,6 +1711,7 @@
         empty.classList.add('hidden');
         grid.innerHTML = filtres.map(doc => genererCarteDocumentHTML(doc)).join('');
       }
+      rendrePageContenu();
     }
 
     async function soumettreDocument(event) {
