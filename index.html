@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Le Français au CEM — Prof. SALMI Ahmed</title>
-  <link rel="icon" type="image/jpeg" href="/logo.JPG" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-[#131f2e] flex items-center justify-center shrink-0">
-          <img src="/logo.JPG" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <img src="/logo.jpg" alt="Logo Prof. SALMI Ahmed" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
           <svg style="display:none;" viewBox="0 0 120 120" class="w-full h-full">
             <circle cx="60" cy="60" r="56" fill="#131f2e" stroke="#d4af37" stroke-width="3"/>
             <text x="60" y="66" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="38" fill="#d4af37">SA</text>
@@ -167,39 +167,46 @@
           <h3 class="font-extrabold text-base tracking-wide uppercase text-white">Catégories & Sous-catégories</h3>
           <p class="text-xs text-blue-300 mt-0.5">Sélectionnez une catégorie pour afficher les documents</p>
         </div>
-        <nav class="p-3.5 space-y-2" id="sidebarCategories">
-          <button data-cat="TOUS" data-sub="TOUS" onclick="filtrerCategorie('TOUS', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-semibold text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer">
-            <span>Toutes les catégories</span><span id="count-cat-TOUS" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
+        <nav class="p-3.5 space-y-2.5" id="sidebarCategories">
+          <button data-cat="TOUS" data-sub="TOUS" onclick="filtrerCategorie('TOUS', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-slate-100 bg-slate-800/80 hover:bg-slate-700/80 border-2 border-slate-400/70 shadow-sm cursor-pointer">
+            <span>Toutes les catégories</span><span id="count-cat-TOUS" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-slate-700 text-white border border-slate-300/70 shadow-sm">0</span>
           </button>
 
-          <!-- Devoir (à part) -->
-          <button type="button" onclick="ouvrirModalDevoirs()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer text-left">
+          <!-- Devoir (à part) : Bleu roi / contour bleu clair -->
+          <button type="button" onclick="ouvrirModalDevoirs()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-blue-100 bg-blue-950/75 hover:bg-blue-900/80 border-2 border-blue-400/80 shadow-sm cursor-pointer text-left">
             <span>Devoir surveillé</span>
-            <span id="count-cat-Devoir" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
+            <span id="count-cat-Devoir" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-600/35 text-blue-100 border border-blue-300/70 shadow-sm">0</span>
           </button>
 
-          <!-- Composition (à part) -->
-          <button type="button" onclick="ouvrirModalCompositions()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer text-left">
+          <!-- Composition (à part) : Émeraude / contour émeraude clair -->
+          <button type="button" onclick="ouvrirModalCompositions()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-emerald-100 bg-emerald-950/75 hover:bg-emerald-900/80 border-2 border-emerald-400/80 shadow-sm cursor-pointer text-left">
             <span>Composition trimestrielle</span>
-            <span id="count-cat-Composition" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span>
+            <span id="count-cat-Composition" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-emerald-600/35 text-emerald-100 border border-emerald-300/70 shadow-sm">0</span>
           </button>
 
-          <!-- Fiche pédagogique -->
+          <!-- Fiche pédagogique : Conservé tel quel (Rose / contour rose clair) -->
           <button type="button" onclick="ouvrirModalFichesPedag()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-rose-100 bg-rose-950/50 hover:bg-rose-900/70 border border-rose-400/40 shadow-sm cursor-pointer text-left">
             <span>Fiches pédagogiques</span>
             <span id="count-cat-Fiche pédagogique" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-rose-500/25 text-rose-200 border border-rose-300/60 shadow-sm">0</span>
           </button>
 
-          <!-- Modèles de production -->
-          <button type="button" onclick="ouvrirModalModelesProd()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-semibold text-amber-200 hover:bg-blue-900/60 border border-transparent hover:border-amber-400/40 cursor-pointer text-left">
+          <!-- Modèles de production : Ambre / contour ambre clair -->
+          <button type="button" onclick="ouvrirModalModelesProd()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-amber-100 bg-amber-950/70 hover:bg-amber-900/80 border-2 border-amber-400/85 shadow-sm cursor-pointer text-left">
             <span>Modèles de production</span>
-            <span id="count-cat-Modèle de production" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/60 shadow-sm">0</span>
+            <span id="count-cat-Modèle de production" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/25 text-amber-200 border border-amber-300/75 shadow-sm">0</span>
           </button>
 
-          <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span></button>
-          <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-blue-100 hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-900/90 text-white border border-blue-400/50 shadow-sm">0</span></button>
-          <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-sky-200 hover:bg-blue-900/60 border border-transparent hover:border-sky-400/40 cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-sky-400/20 text-sky-200 border border-sky-400/60 shadow-sm">0</span></button>
-          <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium text-amber-200 hover:bg-blue-900/60 border border-transparent hover:border-amber-400/40 cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/60 shadow-sm">0</span></button>
+          <!-- Répartition annuelle : Cyan / contour cyan clair -->
+          <button data-cat="Répartition annuelle" data-sub="TOUS" onclick="filtrerCategorie('Répartition annuelle', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-cyan-100 bg-cyan-950/75 hover:bg-cyan-900/80 border-2 border-cyan-400/80 shadow-sm cursor-pointer"><span>Répartition annuelle</span><span id="count-cat-Répartition annuelle" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-cyan-600/35 text-cyan-100 border border-cyan-300/70 shadow-sm">0</span></button>
+
+          <!-- Plan d'apprentissage : Violet / contour violet clair -->
+          <button data-cat="Plan d'apprentissage" data-sub="TOUS" onclick="filtrerCategorie(&quot;Plan d'apprentissage&quot;, 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-violet-100 bg-violet-950/75 hover:bg-violet-900/80 border-2 border-violet-400/80 shadow-sm cursor-pointer"><span>Plan d'apprentissage</span><span id="count-cat-Plan d'apprentissage" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-violet-600/35 text-violet-100 border border-violet-300/70 shadow-sm">0</span></button>
+
+          <!-- Applications : Indigo / contour indigo clair -->
+          <button data-cat="Applications" data-sub="TOUS" onclick="filtrerCategorie('Applications', 'TOUS')" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-indigo-100 bg-indigo-950/75 hover:bg-indigo-900/80 border-2 border-indigo-400/80 shadow-sm cursor-pointer"><span>Applications pédagogiques</span><span id="count-cat-Applications" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-indigo-600/35 text-indigo-100 border border-indigo-300/70 shadow-sm">0</span></button>
+
+          <!-- Sujet BEM : Orange / contour orange clair -->
+          <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-orange-100 bg-orange-950/75 hover:bg-orange-900/80 border-2 border-orange-400/85 shadow-sm cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-orange-500/30 text-orange-100 border border-orange-300/75 shadow-sm">0</span></button>
         </nav>
       </aside>
 
@@ -1933,15 +1940,56 @@
         if (arrow) arrow.classList.toggle('rotate-180', isOpen);
       });
 
+      const paletteSidebar = {
+        'TOUS': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-slate-100 bg-slate-800/80 hover:bg-slate-700/80 border-2 border-slate-400/70 shadow-sm cursor-pointer',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-slate-700 text-white border border-slate-300/70 shadow-sm'
+        },
+        'Devoir': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-blue-100 bg-blue-950/75 hover:bg-blue-900/80 border-2 border-blue-400/80 shadow-sm cursor-pointer text-left',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-blue-600/35 text-blue-100 border border-blue-300/70 shadow-sm'
+        },
+        'Composition': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-emerald-100 bg-emerald-950/75 hover:bg-emerald-900/80 border-2 border-emerald-400/80 shadow-sm cursor-pointer text-left',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-emerald-600/35 text-emerald-100 border border-emerald-300/70 shadow-sm'
+        },
+        'Fiche pédagogique': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-rose-100 bg-rose-950/50 hover:bg-rose-900/70 border border-rose-400/40 shadow-sm cursor-pointer text-left',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-rose-500/25 text-rose-200 border border-rose-300/60 shadow-sm'
+        },
+        'Modèle de production': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-amber-100 bg-amber-950/70 hover:bg-amber-900/80 border-2 border-amber-400/85 shadow-sm cursor-pointer text-left',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-amber-400/25 text-amber-200 border border-amber-300/75 shadow-sm'
+        },
+        'Répartition annuelle': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-cyan-100 bg-cyan-950/75 hover:bg-cyan-900/80 border-2 border-cyan-400/80 shadow-sm cursor-pointer',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-cyan-600/35 text-cyan-100 border border-cyan-300/70 shadow-sm'
+        },
+        "Plan d'apprentissage": {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-violet-100 bg-violet-950/75 hover:bg-violet-900/80 border-2 border-violet-400/80 shadow-sm cursor-pointer',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-violet-600/35 text-violet-100 border border-violet-300/70 shadow-sm'
+        },
+        'Applications': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-indigo-100 bg-indigo-950/75 hover:bg-indigo-900/80 border-2 border-indigo-400/80 shadow-sm cursor-pointer',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-indigo-600/35 text-indigo-100 border border-indigo-300/70 shadow-sm'
+        },
+        'Sujet BEM': {
+          base: 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-orange-100 bg-orange-950/75 hover:bg-orange-900/80 border-2 border-orange-400/85 shadow-sm cursor-pointer',
+          badge: 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-orange-500/30 text-orange-100 border border-orange-300/75 shadow-sm'
+        }
+      };
+
       document.querySelectorAll('.cat-btn').forEach(btn => {
         const badge = btn.querySelector('span:last-child');
-        if (categorieSelectionnee && btn.dataset.cat === categorieActive) {
-          btn.className = 'cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold bg-blue-600 text-white shadow-md border border-blue-400/50 cursor-pointer';
-          if (badge) badge.className = 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-white text-blue-900 shadow-sm';
+        const catKey = btn.dataset.cat;
+        const theme = paletteSidebar[catKey];
+        if (!theme) return;
+        if (categorieSelectionnee && catKey === categorieActive) {
+          btn.className = theme.base.replace('shadow-sm', 'ring-2 ring-white shadow-md');
+          if (badge) badge.className = 'text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full bg-white text-slate-900 shadow-sm';
         } else {
-          const isBem = btn.dataset.cat === 'Sujet BEM', isApp = btn.dataset.cat === 'Applications';
-          btn.className = `cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-medium ${isBem ? 'text-amber-200' : (isApp ? 'text-sky-200' : 'text-blue-100')} hover:bg-blue-900/60 border border-transparent hover:border-blue-700/50 cursor-pointer`;
-          if (badge) badge.className = `text-sm sm:text-base font-extrabold px-3 py-0.5 min-w-[2.4rem] text-center rounded-full shadow-sm ${isBem ? 'bg-amber-400/20 text-amber-300 border border-amber-400/60' : (isApp ? 'bg-sky-400/20 text-sky-200 border border-sky-400/60' : 'bg-blue-900/90 text-white border border-blue-400/50')}`;
+          btn.className = theme.base;
+          if (badge) badge.className = theme.badge;
         }
       });
 
