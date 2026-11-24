@@ -275,7 +275,7 @@
   </main>
 
   <!-- Page dédiée au contenu d'un onglet / catégorie (avec bouton X en haut pour revenir) -->
-  <div id="pageContenuVue" class="hidden fixed inset-0 z-50 bg-slate-50 flex flex-col overflow-hidden">
+  <div id="pageContenuVue" class="hidden fixed inset-0 z-[55] bg-slate-50 flex flex-col overflow-hidden">
     <!-- Barre supérieure fixe avec titre et bouton X -->
     <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-800 text-white shadow-lg shrink-0">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
@@ -731,6 +731,7 @@
     let mpSequenceActive = null;
     let fpAnneeActive = null;
     let fpSequenceActive = null;
+    let retourModalApresFermeture = null;
     let sourceDocumentActive = 'local';
     let estAdmin = false;
     let authInitialisee = false;
@@ -902,20 +903,16 @@
           : 'mp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
       });
 
-      const docsFiltres = tousLesDocuments.filter(
-        (d) => d.categorie === 'Modèle de production' && correspondAuNiveau(d, mpAnneeActive) && d.trimestre === nomSeq
-      );
-
-      const conteneur = document.getElementById('mpResultatsContenu');
-      if (docsFiltres.length === 0) {
-        conteneur.innerHTML = `
-          <div class="text-center py-10 bg-white rounded-2xl border border-dashed border-slate-300 p-6">
-            <p class="font-bold text-slate-800">Aucun modèle de production déposé pour ${mpAnneeActive} — ${nomSeq}</p>
-            ${estAdmin ? `<button type="button" onclick="ouvrirDepotModeleProd()" class="mt-3 bg-amber-400 hover:bg-amber-300 text-blue-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">+ Déposer un modèle pour ${mpAnneeActive} (${nomSeq})</button>` : ''}
-          </div>`;
-      } else {
-        conteneur.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map((doc) => genererCarteDocumentHTML(doc)).join('')}</div>`;
-      }
+      retourModalApresFermeture = 'modalModelesProd';
+      document.getElementById('modalModelesProd').classList.add('hidden');
+      niveauActif = mpAnneeActive || 'TOUS';
+      categorieActive = 'Modèle de production';
+      sousCategorieActive = nomSeq;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = nomSeq;
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
     }
 
     function ouvrirDepotModeleProd() {
@@ -983,20 +980,16 @@
           : 'fp-seq-btn px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-800 border border-slate-300 hover:border-blue-600 hover:bg-blue-50 transition cursor-pointer flex items-center justify-between gap-1';
       });
 
-      const docsFiltres = tousLesDocuments.filter(
-        (d) => d.categorie === 'Fiche pédagogique' && correspondAuNiveau(d, fpAnneeActive) && d.trimestre === nomSeq
-      );
-
-      const conteneur = document.getElementById('fpResultatsContenu');
-      if (docsFiltres.length === 0) {
-        conteneur.innerHTML = `
-          <div class="text-center py-10 bg-white rounded-2xl border border-dashed border-slate-300 p-6">
-            <p class="font-bold text-slate-800">Aucune fiche pédagogique déposée pour ${fpAnneeActive} — ${nomSeq}</p>
-            ${estAdmin ? `<button type="button" onclick="ouvrirDepotFichePedag()" class="mt-3 bg-amber-400 hover:bg-amber-300 text-blue-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">+ Déposer une fiche pour ${fpAnneeActive} (${nomSeq})</button>` : ''}
-          </div>`;
-      } else {
-        conteneur.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${docsFiltres.map((doc) => genererCarteDocumentHTML(doc)).join('')}</div>`;
-      }
+      retourModalApresFermeture = 'modalFichesPedag';
+      document.getElementById('modalFichesPedag').classList.add('hidden');
+      niveauActif = fpAnneeActive || 'TOUS';
+      categorieActive = 'Fiche pédagogique';
+      sousCategorieActive = nomSeq;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = nomSeq;
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
     }
 
     function ouvrirDepotFichePedag() {
@@ -1200,14 +1193,10 @@
       if (!document.getElementById('modalRepartitions').classList.contains('hidden')) changerOngletRepartition(niveauRepartitionActif);
       if (!document.getElementById('modalPlans').classList.contains('hidden')) changerOngletPlan(niveauPlanActif);
       if (!document.getElementById('modalModelesProd').classList.contains('hidden') && mpAnneeActive) {
-        const seqSauvegardee = mpSequenceActive;
         selectionnerAnneeMP(mpAnneeActive);
-        if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
       }
       if (!document.getElementById('modalFichesPedag').classList.contains('hidden') && fpAnneeActive) {
-        const seqSauvegardeeFP = fpSequenceActive;
         selectionnerAnneeFP(fpAnneeActive);
-        if (seqSauvegardeeFP) selectionnerSequenceFP(seqSauvegardeeFP);
       }
     }
 
@@ -1452,14 +1441,10 @@
         mettreAJourCompteursCategories();
         afficherDocuments();
         if (!document.getElementById('modalModelesProd').classList.contains('hidden') && mpAnneeActive) {
-          const seqSauvegardee = mpSequenceActive;
           selectionnerAnneeMP(mpAnneeActive);
-          if (seqSauvegardee) selectionnerSequenceMP(seqSauvegardee);
         }
         if (!document.getElementById('modalFichesPedag').classList.contains('hidden') && fpAnneeActive) {
-          const seqSauvegardeeFP = fpSequenceActive;
           selectionnerAnneeFP(fpAnneeActive);
-          if (seqSauvegardeeFP) selectionnerSequenceFP(seqSauvegardeeFP);
         }
       } catch (err) {
         badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span> Hors ligne';
@@ -1502,6 +1487,17 @@
       const page = document.getElementById('pageContenuVue');
       if (page) page.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
+      if (retourModalApresFermeture) {
+        const modalId = retourModalApresFermeture;
+        retourModalApresFermeture = null;
+        const modalEl = document.getElementById(modalId);
+        if (modalEl) {
+          modalEl.classList.remove('hidden');
+          if (modalId === 'modalFichesPedag' && fpAnneeActive) selectionnerAnneeFP(fpAnneeActive);
+          if (modalId === 'modalModelesProd' && mpAnneeActive) selectionnerAnneeMP(mpAnneeActive);
+        }
+        return;
+      }
       categorieSelectionnee = false;
       mettreAJourStylesMenuGauche();
       afficherDocuments();
@@ -1586,15 +1582,16 @@
         if (apercu && !apercu.classList.contains('hidden')) return fermerModalApercu();
         if (depot && !depot.classList.contains('hidden')) return fermerModalDepot();
         if (login && !login.classList.contains('hidden')) return fermerModalLogin();
+        if (page && !page.classList.contains('hidden')) return fermerPageContenu();
         const fp = document.getElementById('modalFichesPedag');
         const mp = document.getElementById('modalModelesProd');
         if (fp && !fp.classList.contains('hidden')) return fermerModalFichesPedag();
         if (mp && !mp.classList.contains('hidden')) return fermerModalModelesProd();
-        if (page && !page.classList.contains('hidden')) fermerPageContenu();
       }
     });
 
     function filtrerNiveau(niveau) {
+      retourModalApresFermeture = null;
       niveauActif = niveau;
       categorieSelectionnee = true;
       if (categorieActive === 'Sujet BEM') { categorieActive = 'TOUS'; sousCategorieActive = 'TOUS'; }
@@ -1621,6 +1618,7 @@
     }
 
     function filtrerCategorie(cat, subCat = 'TOUS') {
+      retourModalApresFermeture = null;
       categorieSelectionnee = true;
       categorieActive = cat;
       sousCategorieActive = subCat;
