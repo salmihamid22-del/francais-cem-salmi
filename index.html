@@ -207,6 +207,12 @@
 
           <!-- Sujet BEM : Orange / contour orange clair -->
           <button data-cat="Sujet BEM" data-sub="TOUS" onclick="ouvrirTableauBEM()" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-bold text-orange-100 bg-orange-950/75 hover:bg-orange-900/80 border-2 border-orange-400/85 shadow-sm cursor-pointer"><span>Sujet officiel / Blanc BEM</span><span id="count-cat-Sujet BEM" class="text-xs font-extrabold px-2.5 py-0.5 min-w-[2.1rem] text-center rounded-full bg-orange-500/30 text-orange-100 border border-orange-300/75 shadow-sm">0</span></button>
+
+          <!-- فضاء مخصص للتلاميذ بالعربية -->
+          <button type="button" onclick="ouvrirEspaceElevesArabe()" dir="rtl" class="cat-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm sm:text-base font-extrabold text-amber-100 bg-gradient-to-r from-emerald-900/85 via-blue-950/85 to-indigo-950/85 hover:from-emerald-800/90 hover:to-indigo-900/90 border-2 border-amber-300/90 shadow-md cursor-pointer text-right">
+            <span>مخصصة للتلاميذ</span>
+            <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-400 text-blue-950 border border-amber-200 shadow-sm">1م–4م</span>
+          </button>
         </nav>
       </aside>
 
@@ -553,6 +559,36 @@
 
       <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
         <button type="button" onclick="fermerModalModelesProd()" class="bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- فضاء مخصص للتلاميذ بالعربية (الأقسام 1م إلى 4م -> الدروس / الفروض / الاختبارات) -->
+  <div id="modalElevesArabe" dir="rtl" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl border-2 border-amber-300 overflow-hidden flex flex-col text-right">
+      <!-- الشريط العلوي مع زر الخروج × -->
+      <div class="bg-gradient-to-r from-emerald-800 via-blue-900 to-indigo-900 text-white px-6 py-4 flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <h3 id="elevesArTitre" class="font-extrabold text-lg sm:text-xl tracking-tight">فضاء مخصص للتلاميذ</h3>
+          <p id="elevesArSousTitre" class="text-xs sm:text-sm text-amber-200 font-semibold mt-0.5">اختر القسم الدراسي من السنة الأولى متوسط إلى السنة الرابعة متوسط</p>
+        </div>
+        <button type="button" onclick="fermerModalElevesArabe()" title="إغلاق" aria-label="إغلاق" class="w-10 h-10 rounded-xl bg-white/15 hover:bg-red-600 text-white border border-white/30 flex items-center justify-center text-2xl font-black transition cursor-pointer shrink-0">&times;</button>
+      </div>
+
+      <!-- مسار التنقل داخل الفضاء العربي -->
+      <div class="bg-amber-50/80 border-b border-amber-200 px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-slate-800">
+        <div id="elevesArBreadcrumb" class="flex flex-wrap items-center gap-1.5">
+          <span class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white">الأقسام</span>
+        </div>
+        <button type="button" id="btnRetourEtapeElevesAr" onclick="retourEtapeElevesArabe()" class="hidden px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold cursor-pointer">← رجوع</button>
+      </div>
+
+      <!-- محتوى الخطوات -->
+      <div id="elevesArContenu" class="p-6 overflow-y-auto flex-1 bg-slate-50 space-y-5"></div>
+
+      <!-- التذييل -->
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
+        <button type="button" onclick="fermerModalElevesArabe()" class="bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2 rounded-xl cursor-pointer">إغلاق</button>
       </div>
     </div>
   </div>
@@ -937,6 +973,317 @@
       if (doc.niveau === niveauCible) return true;
       if (doc.niveau === 'Tous les niveaux' && ['1AM', '2AM', '3AM', '4AM'].includes(niveauCible)) return true;
       return false;
+    }
+
+    const CLASSES_ARABES = [
+      { code: '1AM', nomAr: 'الأولى متوسط (1م)', badge: '1م' },
+      { code: '2AM', nomAr: 'الثانية متوسط (2م)', badge: '2م' },
+      { code: '3AM', nomAr: 'الثالثة متوسط (3م)', badge: '3م' },
+      { code: '4AM', nomAr: 'الرابعة متوسط (4م)', badge: '4م' }
+    ];
+
+    const SEQUENCES_ELEVES_SITE = [
+      { seq: 'Séquence 01', trim: 'Trimestre 1' },
+      { seq: 'Séquence 02', trim: 'Trimestre 1' },
+      { seq: 'Séquence 03', trim: 'Trimestre 2' },
+      { seq: 'Séquence 04', trim: 'Trimestre 2' },
+      { seq: 'Séquence 05', trim: 'Trimestre 3' },
+      { seq: 'Séquence 06', trim: 'Trimestre 3' },
+      { seq: 'Séquence 07', trim: 'Trimestre 3' }
+    ];
+
+    let elevesArNiveauActif = null;
+    let elevesArLeconActive = null;
+
+    function ouvrirEspaceElevesArabe() {
+      elevesArNiveauActif = null;
+      elevesArLeconActive = null;
+      afficherEtapeNiveauxElevesArabe();
+      document.getElementById('modalElevesArabe').classList.remove('hidden');
+    }
+
+    function fermerModalElevesArabe() {
+      document.getElementById('modalElevesArabe').classList.add('hidden');
+    }
+
+    function retourEtapeElevesArabe() {
+      if (elevesArLeconActive) {
+        elevesArLeconActive = null;
+        afficherEtapeLeconsElevesArabe(elevesArNiveauActif);
+      } else if (elevesArNiveauActif) {
+        elevesArNiveauActif = null;
+        afficherEtapeNiveauxElevesArabe();
+      }
+    }
+
+    function compterModelesElevesArabe(codeNiveau, seqCode = null) {
+      return tousLesDocuments.filter(d => {
+        if (d.categorie !== 'Modèle de production' || !correspondAuNiveau(d, codeNiveau)) return false;
+        if (seqCode && String(d.trimestre || '').trim() !== seqCode) return false;
+        return true;
+      }).length;
+    }
+
+    function afficherEtapeNiveauxElevesArabe() {
+      document.getElementById('elevesArTitre').textContent = 'مخصصة للتلاميذ — اختيار القسم';
+      document.getElementById('elevesArSousTitre').textContent = 'اختر قسمك الدراسي من 1م إلى 4م';
+      document.getElementById('btnRetourEtapeElevesAr').classList.add('hidden');
+      document.getElementById('elevesArBreadcrumb').innerHTML =
+        '<span class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white">الأقسام (1م – 4م)</span>';
+
+      const grid = CLASSES_ARABES.map((cls) => {
+        const nbDevoirs = tousLesDocuments.filter(d => d.categorie === 'Devoir' && correspondAuNiveau(d, cls.code)).length;
+        const nbComps = tousLesDocuments.filter(d => d.categorie === 'Composition' && correspondAuNiveau(d, cls.code)).length;
+        const nbCours = tousLesDocuments.filter(d => (d.categorie === 'Fiche pédagogique' || d.categorie === 'Modèle de production') && correspondAuNiveau(d, cls.code)).length;
+        const nbExpression = compterModelesElevesArabe(cls.code);
+        return `
+          <button type="button" onclick="selectionnerClasseElevesArabe('${cls.code}')" class="bg-white hover:bg-emerald-50/70 border-2 border-emerald-300 hover:border-emerald-600 rounded-2xl p-5 shadow-sm hover:shadow-md transition cursor-pointer text-right flex flex-col justify-between gap-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base sm:text-lg font-extrabold text-blue-950">${cls.nomAr}</span>
+              <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-400 text-blue-950">${cls.badge}</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-bold text-slate-600 pt-2 border-t border-slate-100">
+              <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">الدروس: ${nbCours}</span>
+              <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200">الفروض: ${nbDevoirs}</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">الاختبارات: ${nbComps}</span>
+              <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200">تعبير كتابي: ${nbExpression}</span>
+            </div>
+          </button>`;
+      }).join('');
+
+      document.getElementById('elevesArContenu').innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">${grid}</div>`;
+    }
+
+    function selectionnerClasseElevesArabe(codeNiveau) {
+      elevesArNiveauActif = codeNiveau;
+      elevesArLeconActive = null;
+      afficherEtapeLeconsElevesArabe(codeNiveau);
+    }
+
+    function estDocSoutienPourSequence(doc, codeNiveau, seqCode) {
+      if (!correspondAuNiveau(doc, codeNiveau)) return false;
+      const cat = String(doc.categorie || '').toLowerCase();
+      const titre = String(doc.titre || '').toLowerCase();
+      const trim = String(doc.trimestre || '').trim();
+      const estSoutien = cat.includes('soutien') || cat.includes('remédi') || cat.includes('remedi') || titre.includes('soutien') || titre.includes('remédi') || titre.includes('remedi') || titre.includes('دعم');
+      return estSoutien && (trim === seqCode || trim === 'TOUS' || trim === 'Annales');
+    }
+
+    function afficherEtapeLeconsElevesArabe(codeNiveau) {
+      const clsObj = CLASSES_ARABES.find(c => c.code === codeNiveau) || { code: codeNiveau, nomAr: codeNiveau, badge: codeNiveau };
+      document.getElementById('elevesArTitre').textContent = `${clsObj.nomAr} — الدروس والفروض والاختبارات والتعبير الكتابي`;
+      document.getElementById('elevesArSousTitre').textContent = 'اختر المقطع للربط بالمذكرات أو النماذج، أو افتح الفروض والاختبارات والتعبير الكتابي ودروس الدعم';
+      document.getElementById('btnRetourEtapeElevesAr').classList.remove('hidden');
+      document.getElementById('elevesArBreadcrumb').innerHTML = `
+        <button type="button" onclick="afficherEtapeNiveauxElevesArabe()" class="px-2.5 py-0.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 cursor-pointer">الأقسام</button>
+        <span>/</span>
+        <span class="px-2.5 py-0.5 rounded-lg bg-blue-900 text-white">${clsObj.nomAr}</span>`;
+
+      const nbDevoirs = tousLesDocuments.filter(d => d.categorie === 'Devoir' && correspondAuNiveau(d, codeNiveau)).length;
+      const nbComps = tousLesDocuments.filter(d => d.categorie === 'Composition' && correspondAuNiveau(d, codeNiveau)).length;
+      const nbExpression = compterModelesElevesArabe(codeNiveau);
+
+      const leconsCards = SEQUENCES_ELEVES_SITE.map((lec) => {
+        const nbFiches = tousLesDocuments.filter(d => d.categorie === 'Fiche pédagogique' && correspondAuNiveau(d, codeNiveau) && d.trimestre === lec.seq).length;
+        const nbModeles = compterModelesElevesArabe(codeNiveau, lec.seq);
+        const nbSoutien = tousLesDocuments.filter(d => estDocSoutienPourSequence(d, codeNiveau, lec.seq)).length;
+        return `
+          <div class="bg-white border border-slate-200 hover:border-indigo-400 rounded-xl p-3.5 shadow-sm transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <button type="button" onclick="selectionnerLeconElevesArabe('${codeNiveau}', '${lec.seq}', '${lec.seq}')" class="flex-1 text-right cursor-pointer group">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-sm sm:text-base font-extrabold text-blue-950 group-hover:text-indigo-700 transition">${lec.seq}</span>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">${lec.trim}</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 text-[11px] font-bold mt-1.5">
+                <span class="text-rose-700">المذكرات: ${nbFiches}</span>
+                <span class="text-amber-700">تعبير كتابي (Modèles): ${nbModeles}</span>
+              </div>
+            </button>
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button type="button" onclick="ouvrirExpressionEcriteElevesArabe('${codeNiveau}', '${lec.seq}')" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-amber-500 hover:bg-amber-400 text-blue-950 border border-amber-300 shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span>تعبير كتابي</span>
+                <span class="px-2 py-0.5 rounded-full bg-blue-950 text-amber-300 font-extrabold">${nbModeles}</span>
+              </button>
+              <button type="button" onclick="ouvrirSoutienSequenceElevesArabe('${codeNiveau}', '${lec.seq}')" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-teal-700 hover:bg-teal-600 text-white border border-teal-500/40 shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span>دروس الدعم</span>
+                <span class="px-2 py-0.5 rounded-full bg-white text-teal-900 font-extrabold">${nbSoutien}</span>
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('elevesArContenu').innerHTML = `
+        <!-- بطاقات الفروض والاختبارات والتعبير الكتابي للقسم المختار -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <button type="button" onclick="ouvrirFichesOuDevoirsElevesArabe('${codeNiveau}', 'Devoir', 'الفروض (${clsObj.badge})')" class="bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white rounded-2xl p-4 shadow-md transition cursor-pointer flex items-center justify-between gap-3 text-right">
+            <div>
+              <span class="block text-sm sm:text-base font-extrabold">الفروض (Devoirs)</span>
+              <span class="text-[11px] text-blue-100">مرتبط بقسم الفروض (Devoir) للمستوى ${clsObj.badge}</span>
+            </div>
+            <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-white text-blue-950">${nbDevoirs}</span>
+          </button>
+
+          <button type="button" onclick="ouvrirFichesOuDevoirsElevesArabe('${codeNiveau}', 'Composition', 'الاختبارات (${clsObj.badge})')" class="bg-gradient-to-r from-emerald-800 to-teal-700 hover:from-emerald-700 hover:to-teal-600 text-white rounded-2xl p-4 shadow-md transition cursor-pointer flex items-center justify-between gap-3 text-right">
+            <div>
+              <span class="block text-sm sm:text-base font-extrabold">الاختبارات (Compositions)</span>
+              <span class="text-[11px] text-emerald-100">مرتبط بقسم الاختبارات (Composition) للمستوى ${clsObj.badge}</span>
+            </div>
+            <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-white text-emerald-950">${nbComps}</span>
+          </button>
+
+          <button type="button" onclick="ouvrirExpressionEcriteElevesArabe('${codeNiveau}', null)" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-blue-950 rounded-2xl p-4 shadow-md transition cursor-pointer flex items-center justify-between gap-3 text-right">
+            <div>
+              <span class="block text-sm sm:text-base font-extrabold">تعبير كتابي (Modèles)</span>
+              <span class="text-[11px] text-amber-950 font-semibold">مرتبط بقسم Modèles للمستوى ${clsObj.badge}</span>
+            </div>
+            <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-blue-950 text-amber-300">${nbExpression}</span>
+          </button>
+        </div>
+
+        <!-- المقاطع حسب المستوى مع تعبير كتابي ودروس الدعم بجانب كل مقطع -->
+        <div>
+          <h4 class="text-sm font-extrabold text-slate-800 mb-3">المقاطع (${clsObj.nomAr}) — اختر مقطعاً أو افتح التعبير الكتابي ودروس الدعم:</h4>
+          <div class="space-y-2.5">${leconsCards}</div>
+        </div>`;
+    }
+
+    function ouvrirExpressionEcriteElevesArabe(codeNiveau, seqCode = null) {
+      const clsObj = CLASSES_ARABES.find(c => c.code === codeNiveau) || { code: codeNiveau, nomAr: codeNiveau, badge: codeNiveau };
+      retourModalApresFermeture = 'modalElevesArabe';
+      document.getElementById('modalElevesArabe').classList.add('hidden');
+      niveauActif = codeNiveau;
+      categorieActive = 'Modèle de production';
+      sousCategorieActive = seqCode || 'TOUS';
+      compTrimestreActive = null;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = seqCode || 'TOUS';
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
+      document.getElementById('pageVueTitre').textContent = seqCode
+        ? `تعبير كتابي (Modèles) • ${seqCode} (${clsObj.badge})`
+        : `تعبير كتابي (Modèles) (${clsObj.badge})`;
+    }
+
+    function ouvrirSoutienSequenceElevesArabe(codeNiveau, seqCode) {
+      const clsObj = CLASSES_ARABES.find(c => c.code === codeNiveau) || { code: codeNiveau, nomAr: codeNiveau, badge: codeNiveau };
+      retourModalApresFermeture = 'modalElevesArabe';
+      document.getElementById('modalElevesArabe').classList.add('hidden');
+      niveauActif = codeNiveau;
+      categorieActive = 'TOUS';
+      sousCategorieActive = seqCode;
+      compTrimestreActive = null;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = 'TOUS';
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+
+      const page = document.getElementById('pageContenuVue');
+      if (!page) return;
+      document.getElementById('pageSearchInput').value = '';
+      page.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+
+      const docsSoutien = tousLesDocuments.filter(d => estDocSoutienPourSequence(d, codeNiveau, seqCode));
+      document.getElementById('pageVueTitre').textContent = `دروس الدعم • ${seqCode} (${clsObj.badge})`;
+      document.getElementById('pageVueBadgeNiveau').textContent = clsObj.badge;
+      document.getElementById('pageVueCount').textContent = `${docsSoutien.length} document(s)`;
+      document.getElementById('pageBemTableSection').classList.add('hidden');
+      document.getElementById('pageNiveauPills').classList.add('hidden');
+
+      const grid = document.getElementById('pageDocumentsGrid');
+      const empty = document.getElementById('pageEmptyState');
+      if (docsSoutien.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.classList.remove('hidden');
+        grid.innerHTML = docsSoutien.map(doc => genererCarteDocumentHTML(doc)).join('');
+      }
+    }
+
+    function selectionnerLeconElevesArabe(codeNiveau, seqCode, titreAr) {
+      elevesArLeconActive = { codeNiveau, seqCode, titreAr };
+      const clsObj = CLASSES_ARABES.find(c => c.code === codeNiveau) || { code: codeNiveau, nomAr: codeNiveau, badge: codeNiveau };
+      document.getElementById('elevesArTitre').textContent = `${seqCode} (${clsObj.badge})`;
+      document.getElementById('elevesArSousTitre').textContent = 'اختر ربط المقطع بالمذكرات أو التعبير الكتابي (Modèles) أو دروس الدعم';
+      document.getElementById('btnRetourEtapeElevesAr').classList.remove('hidden');
+      document.getElementById('elevesArBreadcrumb').innerHTML = `
+        <button type="button" onclick="afficherEtapeNiveauxElevesArabe()" class="px-2.5 py-0.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 cursor-pointer">الأقسام</button>
+        <span>/</span>
+        <button type="button" onclick="afficherEtapeLeconsElevesArabe('${codeNiveau}')" class="px-2.5 py-0.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 cursor-pointer">${clsObj.nomAr}</button>
+        <span>/</span>
+        <span class="px-2.5 py-0.5 rounded-lg bg-indigo-700 text-white">${seqCode}</span>`;
+
+      const nbFiches = tousLesDocuments.filter(d => d.categorie === 'Fiche pédagogique' && correspondAuNiveau(d, codeNiveau) && d.trimestre === seqCode).length;
+      const nbModeles = compterModelesElevesArabe(codeNiveau, seqCode);
+      const nbSoutien = tousLesDocuments.filter(d => estDocSoutienPourSequence(d, codeNiveau, seqCode)).length;
+
+      document.getElementById('elevesArContenu').innerHTML = `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-900">${clsObj.nomAr}</span>
+              <h4 class="text-lg font-extrabold text-slate-900 mt-1">${seqCode}</h4>
+              <p class="text-xs text-slate-600 mt-0.5">اختر نوع المحتوى المرتبط بهذا المقطع في المستوى <strong>${clsObj.badge}</strong>:</p>
+            </div>
+            <button type="button" onclick="ouvrirSoutienSequenceElevesArabe('${codeNiveau}', '${seqCode}')" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-teal-700 hover:bg-teal-600 text-white shadow cursor-pointer flex items-center gap-2">
+              <span>دروس الدعم</span>
+              <span class="px-2 py-0.5 rounded-full bg-white text-teal-900">${nbSoutien}</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button type="button" onclick="ouvrirLienLeconElevesArabe('${codeNiveau}', '${seqCode}', 'Fiche pédagogique', '${seqCode} — المذكرات')" class="bg-gradient-to-r from-rose-700 via-pink-600 to-amber-500 hover:from-rose-600 hover:to-amber-400 text-white rounded-2xl p-5 shadow-md transition cursor-pointer flex items-center justify-between gap-3 text-right">
+              <div>
+                <span class="block text-base font-extrabold">المذكرات (Fiches pédagogiques)</span>
+                <span class="text-xs text-rose-100">عرض مذكرات ${seqCode} للمستوى ${clsObj.badge}</span>
+              </div>
+              <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-white text-rose-900">${nbFiches}</span>
+            </button>
+
+            <button type="button" onclick="ouvrirExpressionEcriteElevesArabe('${codeNiveau}', '${seqCode}')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-blue-950 rounded-2xl p-5 shadow-md transition cursor-pointer flex items-center justify-between gap-3 text-right">
+              <div>
+                <span class="block text-base font-extrabold">تعبير كتابي (Modèles)</span>
+                <span class="text-xs text-amber-950 font-semibold">عرض نماذج التعبير الكتابي (Modèles) ${seqCode} للمستوى ${clsObj.badge}</span>
+              </div>
+              <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-blue-950 text-amber-300">${nbModeles}</span>
+            </button>
+          </div>
+        </div>`;
+    }
+
+    function ouvrirLienLeconElevesArabe(codeNiveau, seqCode, catCible, labelTitreAr) {
+      retourModalApresFermeture = 'modalElevesArabe';
+      document.getElementById('modalElevesArabe').classList.add('hidden');
+      niveauActif = codeNiveau;
+      categorieActive = catCible;
+      sousCategorieActive = seqCode;
+      compTrimestreActive = null;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = seqCode;
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
+      document.getElementById('pageVueTitre').textContent = `${labelTitreAr} • ${seqCode}`;
+    }
+
+    function ouvrirFichesOuDevoirsElevesArabe(codeNiveau, catCible, labelTitreAr) {
+      retourModalApresFermeture = 'modalElevesArabe';
+      document.getElementById('modalElevesArabe').classList.add('hidden');
+      niveauActif = codeNiveau;
+      categorieActive = catCible;
+      sousCategorieActive = 'TOUS';
+      compTrimestreActive = null;
+      categorieSelectionnee = true;
+      document.getElementById('filterTrimestre').value = 'TOUS';
+      mettreAJourCompteursCategories();
+      mettreAJourStylesMenuGauche();
+      ouvrirPageContenu();
+      document.getElementById('pageVueTitre').textContent = labelTitreAr;
     }
 
     function ouvrirModalModelesProd() {
@@ -1782,6 +2129,11 @@
           if (modalId === 'modalModelesProd' && mpAnneeActive) selectionnerAnneeMP(mpAnneeActive);
           if (modalId === 'modalDevoirs' && devAnneeActive) selectionnerAnneeDev(devAnneeActive);
           if (modalId === 'modalCompositions' && compAnneeActive) selectionnerAnneeComp(compAnneeActive);
+          if (modalId === 'modalElevesArabe') {
+            if (elevesArLeconActive) selectionnerLeconElevesArabe(elevesArLeconActive.codeNiveau, elevesArLeconActive.seqCode, elevesArLeconActive.titreAr);
+            else if (elevesArNiveauActif) afficherEtapeLeconsElevesArabe(elevesArNiveauActif);
+            else afficherEtapeNiveauxElevesArabe();
+          }
         }
         return;
       }
@@ -1886,6 +2238,8 @@
         const fp = document.getElementById('modalFichesPedag');
         const mp = document.getElementById('modalModelesProd');
         const dv = document.getElementById('modalDevoirs');
+        const ea = document.getElementById('modalElevesArabe');
+        if (ea && !ea.classList.contains('hidden')) return fermerModalElevesArabe();
         const cp = document.getElementById('modalCompositions');
         if (fp && !fp.classList.contains('hidden')) return fermerModalFichesPedag();
         if (mp && !mp.classList.contains('hidden')) return fermerModalModelesProd();
